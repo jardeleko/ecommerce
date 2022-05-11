@@ -2,9 +2,10 @@ const sliderItems = [
     {
         id: 1,
         img: 'https://i.pinimg.com/564x/da/8f/35/da8f3598f8c70636699aa7dedb82912d.jpg',
-        title: 'SUMMER FASHION',
+        title: 'BEST CLOTHES',
         bg: 'd9dada',
         desc:"DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
+        cat: 'women'
     },
     {
         id: 3,
@@ -12,6 +13,7 @@ const sliderItems = [
         title: 'ALTERNATIVE COLLECTION',
         bg: 'f4e4d0',
         desc:"DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
+        cat: 'unisex'
     },        
     {
         id: 2,
@@ -19,6 +21,7 @@ const sliderItems = [
         title: 'SOCIAL CLOTHES',
         bg: 'd4d8e4',
         desc:"DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
+        cat: 'man'
     }
 ]
 

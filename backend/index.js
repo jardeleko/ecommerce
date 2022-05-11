@@ -9,6 +9,8 @@ const cartRoute = require('./routes/cart')
 const orderRoute = require('./routes/order')
 const stripeRoute = require('./routes/stripe')
 const path = require('path')
+const cors = require('cors')
+
 
 app.get("/test", (req, res) => {
     res.sendFile(path.join(__dirname+'/views/doc.html'));
@@ -22,6 +24,7 @@ mongoose.connect(process.env.MONGO_URL).then(() =>
        console.log("Error Connection, exception:", err)
     })
 
+app.use(cors())
 app.use(express.json())
 app.use("/api/users",userRoute)
 app.use("/api/auth",authRoute)
