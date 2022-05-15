@@ -32,7 +32,9 @@ const Form = styled.form`
     flex-direction:column;
     margin: 20px;
 `
+const P = styled.p`
 
+`
 const Input = styled.input`
     flex:1;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -49,8 +51,8 @@ const Link = styled.a`
     font-size:15px;
     text-decoration: silver;
     font-weight:bold;
-    margin: 10px;
-
+    margin-top: 5px;
+    color: inherit;;
      &:hover{        
         color:#54a85c;
         text-decoration:underline;
@@ -81,14 +83,14 @@ const Login = () => {
             <Title>SIGN IN </Title>
             <Form>
                 <Input placeholder="username" type="text" name="username"/>
-                <Input placeholder="last name" type="password" name="password"/>
+                <Input placeholder="password" type="password" name="password"/>
                 <Button>LOGIN</Button>
-                <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
-                <Link>CREATE A NEW ACCOUNT</Link>
+                <P>DO NOT YOU REMEMBER THE PASSWORD?</P>
+                <Link href='/Register'>CREATE A NEW ACCOUNT</Link>
             </Form>
         </Wrapper>        
     </Container>
   )
 }
 
-export default Login
+export default Login;

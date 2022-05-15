@@ -1,13 +1,27 @@
-import { Search, ShoppingCartOutlined } from '@material-ui/icons'
-import Badge from '@material-ui/core/Badge'
-import React from 'react'
-import styled from 'styled-components'
-import {mobile} from '../responsive'
+import { Search, ShoppingCartOutlined } from '@material-ui/icons';
+import Badge from '@material-ui/core/Badge';
+import React from 'react';
+import styled from 'styled-components';
+import { mobile } from '../responsive';
+import {Link} from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+const LS = styled(Link)`
+    color: #ffffff;
+    text-decoration:none;
+    font-weight:bold;
+    &:hover{        
+        color:#54a85c;
+        text-decoration:none;
+    }
+    cursor:pointer;
+
+`;
 
 const Container = styled.div`
     height: 60px;
-    background-color: white;
-    color: black;
+    background-color: #3a3736;
+    color: #ffffff;
     ${mobile({height:"50px"})}
 `
 const Wrapper = styled.div`
@@ -60,12 +74,10 @@ const MenuItem = styled.div`
     cursor: pointer;
     margin-left:25px;
     ${mobile({fontSize:"12px", marginLeft:"10px"})}
-
 `
 
-//components usage with case sensitive format-> Stext Uppercase in initials
-
 const Navbar = () => {
+    const quantity = useSelector((state) => state.cart.quantity);
     return (
         <Container>
             <Wrapper>
@@ -77,16 +89,18 @@ const Navbar = () => {
                         </SearchContainer>
                 </Left>
                 <Center>
-                    <Logo>SAN FLAME</Logo>
+                    <Logo><LS to={`/`}> SAN FLAME</LS></Logo>
                 </Center>
                 <Right>
-                    <MenuItem>REGISTER</MenuItem>
-                    <MenuItem>SIGN IN</MenuItem>
+                    <MenuItem> <LS to={`/register`}>REGISTER</LS></MenuItem>
+                    <MenuItem><LS to={`/login`}>SIGN IN</LS></MenuItem>
                     <MenuItem>
-                    <Badge 
-                        badgeContent={1} color="primary">
-                        <ShoppingCartOutlined />
-                    </Badge>
+                    <LS to={`/cart`}>
+                        <Badge 
+                            badgeContent={quantity} color="primary">
+                            <ShoppingCartOutlined />
+                        </Badge>
+                    </LS>
                     </MenuItem>
                 </Right>
             </Wrapper>
@@ -94,4 +108,4 @@ const Navbar = () => {
     )
 }
 
-export default Navbar
+export default Navbar;

@@ -11,7 +11,6 @@ const stripeRoute = require('./routes/stripe')
 const path = require('path')
 const cors = require('cors')
 
-
 app.get("/test", (req, res) => {
     res.sendFile(path.join(__dirname+'/views/doc.html'));
 })

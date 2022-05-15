@@ -1,9 +1,9 @@
 const sliderItems = [
     {
         id: 1,
-        img: 'https://i.pinimg.com/564x/da/8f/35/da8f3598f8c70636699aa7dedb82912d.jpg',
+        img: 'https://i.pinimg.com/564x/d4/a8/5f/d4a85f8830457e99737878ec1c1e95a3.jpg',
         title: 'BEST CLOTHES',
-        bg: 'd9dada',
+        bg: 'f0f0f0',
         desc:"DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
         cat: 'women'
     },

@@ -1,9 +1,16 @@
-import Navbar from '../components/Navbar'
-import Announcement from '../components/Announcement'
-import Footer from '../components/Footer'
-import styled from 'styled-components'
-import { Add, Remove } from '@material-ui/icons'
-import { mobile } from '../responsive'
+import Navbar from '../components/Navbar';
+import Announcement from '../components/Announcement';
+import Footer from '../components/Footer';
+import styled from 'styled-components';
+import { Add, Remove } from '@material-ui/icons';
+import { mobile } from '../responsive';
+import { useSelector } from 'react-redux';
+import StripeCheckout from 'react-stripe-checkout';
+import { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import userRequest from '../request/requestMethods';
+
+const KEY = process.env.REACT_APP_STRIPE
 
 const Container = styled.div`
 `
@@ -150,88 +157,104 @@ const Button = styled.button`
     cursor:pointer;
 `
 
-
 const Cart = () => {
-  return (
-    <Container>
-        <Navbar/>
-        <Announcement/>
-        <Wrapper>
-        <Title>YOUR BAG</Title>
-            <Top> 
-            <TopButton>CONTINUE SHOPPING</TopButton>
-            <TopTexts>
-                <TopText>Shopping Bag (2)</TopText>
-                <TopText>Your Wishlist (0)</TopText>
-            </TopTexts>
-            <TopButton type="filled">CHECKOUT NOW</TopButton>
-            </Top>
-        <Bottom> 
-            <Info>
-                <Product>
-                    <ProductDetail>
-                        <Image src="https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/45ee8e5deb4046c5b25fadb700ee9030_9366/Tenis_Sarlacc_Pit_Samba_Bege_GX6806_04_standard.jpg"/>
-                        <Details>
-                            <ProductName><b>Product:</b> ADIDAS SARLACC PIT SAMBA</ProductName>
-                            <ProductId><b>ID:</b> 9931210311</ProductId>
-                            <ProductColor color="beige"/>
-                            <ProductSize><b>Size:</b> 10</ProductSize>
-                        </Details>
-                    </ProductDetail>
-                    <PriceDetail>
-                        <ProductAmountContainer>
-                            <Add/>
-                            <ProductAmount> 2</ProductAmount>
-                            <Remove/>
-                        </ProductAmountContainer>
-                        <ProductPrice>$ 100</ProductPrice>
-                    </PriceDetail>
-                </Product>
-                <Hr/>
-                <Product>
-                <ProductDetail>
-                    <Image src="https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/78d89badd0f04777ac91ace200b512ec_9366/Camisa_2_Real_Madrid_21-22_Azul_GR3985_01_laydown.jpg"/>
-                    <Details>
-                        <ProductName><b>Product:</b> REAL MADRID SHIRT 21/22 MODEL 2</ProductName>
-                        <ProductId><b>ID:</b> 20221111111</ProductId>
-                        <ProductColor color="blue"/>
-                        <ProductSize><b>Size:</b> L</ProductSize>
-                    </Details>
-                </ProductDetail>
-                <PriceDetail>
-                    <ProductAmountContainer>
-                        <Add/>
-                        <ProductAmount>1</ProductAmount>
-                        <Remove/>
-                    </ProductAmountContainer>
-                    <ProductPrice>$65</ProductPrice>
-                </PriceDetail>
-            </Product>
-            </Info>
-            <Summary>
-                <SummaryTitle>ORDER SUMMARY</SummaryTitle>
-                <SummaryItem>
-                    <SummaryItemText>Subtotal</SummaryItemText>
-                    <SummaryItemText>$ 165</SummaryItemText>
-                </SummaryItem>
-                <SummaryItem>
-                    <SummaryItemText>Estimated Shipping</SummaryItemText>
-                    <SummaryItemText>$ 5.90</SummaryItemText>
-                </SummaryItem>
-                <SummaryItem>
-                    <SummaryItemText>Shipping Discount</SummaryItemText>
-                    <SummaryItemText>$ -20</SummaryItemText>
-                </SummaryItem>
-                <SummaryItem type="total">
-                    <SummaryItemText>Total</SummaryItemText>
-                    <SummaryItemText>$ 150.9</SummaryItemText>
-                </SummaryItem>
-                <Button>BUY NOW</Button>
-            </Summary>
-        </Bottom>
-        </Wrapper>
-        <Footer/>
-    </Container>
+    const cart = useSelector((state)=> state.cart);
+    const [stripeToken, setStripeToken] = useState(null);
+    const history = useNavigate()
+
+    const onToken = (token) =>{
+        setStripeToken(token);
+    }
+    useEffect(()=> {
+        const makeRequest = async () => {
+            const localPrice = cart.total * 100;
+        await userRequest.post("/checkout/payment", { 
+            tokenId: stripeToken.id, 
+            amount: localPrice,
+            }).then((res) => {
+                history("/success", {data:res.data})  
+                console.log(res.data)  
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
+        stripeToken && makeRequest();
+    }, [stripeToken, cart.total, history])
+    
+    return (
+        <Container>
+            <Navbar/>
+            <Announcement/>
+            <Wrapper>
+            <Title>YOUR BAG</Title>
+                <Top> 
+                <TopButton>CONTINUE SHOPPING</TopButton>
+                <TopTexts>
+                    <TopText>Shopping Bag (2)</TopText>
+                    <TopText>Your Wishlist (0)</TopText>
+                </TopTexts>
+                <TopButton type="filled">CHECKOUT NOW</TopButton>
+                </Top>
+            <Bottom> 
+                <Info>
+                    {cart.products.map((product) => (
+                    <Product>
+                        <ProductDetail>
+                            <Image src={product.img}/>
+                            <Details>
+                                <ProductName><b>Product: </b>{product.title}</ProductName>
+                                <ProductId><b>ID: </b> {product._id}</ProductId>
+                                <ProductColor color= {product.color}/>
+                                <ProductSize><b>Size: </b>  {product.size}</ProductSize>
+                            </Details>
+                        </ProductDetail>
+                        <PriceDetail>
+                            <ProductAmountContainer>
+                                <Add/>
+                                <ProductAmount> {product.quantity} </ProductAmount>
+                                <Remove/>
+                            </ProductAmountContainer>
+                            <ProductPrice>$ {product.price * product.quantity}</ProductPrice>
+                        </PriceDetail>
+                    </Product>                    
+                    ))}
+                    <Hr />
+                </Info>
+                <Summary>
+                    <SummaryTitle>ORDER SUMMARY</SummaryTitle>
+                    <SummaryItem>
+                        <SummaryItemText>Subtotal</SummaryItemText>
+                        <SummaryItemText>$ {cart.total}</SummaryItemText>
+                    </SummaryItem>
+                    <SummaryItem>
+                        <SummaryItemText>Estimated Shipping</SummaryItemText>
+                        <SummaryItemText>$ 5.90</SummaryItemText>
+                    </SummaryItem>
+                    <SummaryItem>
+                        <SummaryItemText>Shipping Discount</SummaryItemText>
+                        <SummaryItemText>$ 0.00</SummaryItemText>
+                    </SummaryItem>
+                    <SummaryItem type="total">
+                        <SummaryItemText>Total</SummaryItemText>
+                        <SummaryItemText>$ {cart.total + (5.90)} </SummaryItemText>
+                    </SummaryItem>
+                    <StripeCheckout
+                    name="San Flame"
+                    image="https://images.vexels.com/media/users/3/200093/isolated/preview/596f0d8cb733b17268752d044976f102-icone-de-sacola-de-compras.png"
+                    billingAddress
+                    shippingAddress
+                    description={`TOTAL IS $ ${cart.total}`}
+                    amount={cart.total*100}
+                    token={onToken}
+                    stripeKey={KEY}
+                    >
+                        <Button>BUY NOW</Button>
+                    </StripeCheckout>    
+                </Summary>
+            </Bottom>
+            </Wrapper>
+            <Footer/>
+        </Container>
   )
 }
 

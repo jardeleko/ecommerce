@@ -51,8 +51,10 @@ const ImgContainer = styled.div`
     flex:1;
 `
 const Image = styled.img`
-    height:80%;
-    width:80%; 
+    height:100%;
+    width:90%; 
+    border-radius:0 0 15px 0;
+
 `
 
 const InfoContainer = styled.div`
@@ -73,8 +75,16 @@ const Button = styled.button`
     padding:10px;
     font-size:20px;
     background-color:transparent;
+    color: solid black;
     cursor:pointer;
-    border-radius:5px;
+    border-radius: 10px;
+    border: 1px solid black;
+    box-shadow: 0 0 20px black;
+    
+    &:hover{
+        color: black;
+        font-weight: 500;
+    }
 `
 
 const Slider = () => {

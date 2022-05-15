@@ -10,6 +10,7 @@ import {React, useState} from 'react';
 
 const Container = styled.div``
 const Title = styled.h1`
+    text-align: center;
     margin: 20px;
 `
 const FilterContainer = styled.div`
@@ -54,7 +55,7 @@ const ProductList = () => {
     <Container>
         <Navbar/>
         <Announcement/>
-        <Title> Dresses </Title>
+        <Title> {cat.toUpperCase()} </Title>
         <FilterContainer>
             <Filter>
                 <FilterText>Filter Products: </FilterText>

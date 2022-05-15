@@ -1,7 +1,7 @@
 const categories = [
     {
         id: 1,
-        img: 'https://i.pinimg.com/564x/d4/a8/5f/d4a85f8830457e99737878ec1c1e95a3.jpg',
+        img: 'https://i.pinimg.com/564x/da/8f/35/da8f3598f8c70636699aa7dedb82912d.jpg',
         title: 'WOMEN LOOKS',
         cat: 'women'
     },

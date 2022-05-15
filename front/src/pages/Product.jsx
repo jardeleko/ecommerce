@@ -8,6 +8,8 @@ import {mobile} from '../responsive'
 import { useLocation } from 'react-router'
 import {React, useEffect, useState} from 'react';
 import publicRequest from '../request/publicMethods';
+import { addProduct } from '../redux/cartRedux';
+import { useDispatch } from 'react-redux'
 
 const Container = styled.div``
 
@@ -15,7 +17,6 @@ const Wrapper = styled.div`
     padding: 20px;
     display: flex;
     ${mobile({padding:"10px", flexDirection:"column"})}
-
 `
 const ImgContainer = styled.div`
     flex:1;
@@ -23,15 +24,14 @@ const ImgContainer = styled.div`
 const Image = styled.img`
     width: 100%;
     height: 90vh;
-    object-fit:cover;
+    border-radius: 20px;
+    object-fit:scale-down;
     ${mobile({height:"40vh"})}
-
 `
 const InfoContainer = styled.div`
     flex:1;
     padding: 0px 50px;
     ${mobile({padding:"10px"})}
-
 `
 const Title = styled.h1`
     font-weight:400;
@@ -102,30 +102,36 @@ const Amount = styled.span`
     margin: 0px 5px ;
 `
 const Button = styled.button`
-    padding: 15px;
-    border: 2px solid teal;
-    background-color: white;
-    cursor: pointer;
+    padding: 20px;
+    border: 2px solid lightgray;
+    border-radius: 10px;
+    background-color: transparent;
     font-weight:600 ;
+    transition: all 0.5s ease 0s;
+    box-shadow: 0 0 20px teal;
+    cursor: pointer;
+
     &:hover{
-        background-color: lightgoldenrodyellow;
+        background-color:#518585;    
+        color:white;
+        transition: width 2s, height 2s, background-color 0.6s, color 0.6s, transform 2s;
         opacity:3;
     }
 `
 
-const SingleProduct = () => {
+const Product = () => {
     const location = useLocation();
     const id = location.pathname.split("/")[2];
     const [product, setProduct] = useState({});
     const [quantity, setQuantity] = useState(1);
     const [color, setColor] = useState('');
     const [size, setSize] = useState('');
-    console.log(color, size);
+    const dispatch = useDispatch();
+
     useEffect(()=> {
         const getProduct = async () => {
         await publicRequest.get("/products/find/"+id).then((res) => {
                 setProduct(res.data)
-                console.log(res.data)
             }).catch((err)=>{
                 console.log(err)
             })
@@ -140,7 +146,9 @@ const SingleProduct = () => {
             setQuantity(quantity+1)
         }
     }
-    // const handClick
+    const handleClick = () => { 
+        dispatch(addProduct({ ...product, quantity, color, size }));
+    }
 
   return (
     <Container>
@@ -176,7 +184,7 @@ const SingleProduct = () => {
                         <Amount>{quantity}</Amount>
                         <Add cursor="pointer" onClick={()=>handleQuantity("inc")}/>
                     </AmountContainer>
-                    <Button> ADD TO CART </Button>
+                    <Button onClick={handleClick}> ADD TO CART </Button>
                 </AddContainer>
             </InfoContainer>
         </Wrapper>
@@ -186,4 +194,4 @@ const SingleProduct = () => {
   )
 }
 
-export default SingleProduct
+export default Product;
