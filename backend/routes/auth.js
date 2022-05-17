@@ -22,25 +22,27 @@ router.post("/register", async (req, res) => {
 })
 
 router.post("/login", async (req, res) => {
-    try{
-        const user = await User.findOne({username:req.body.username})
-        !user && res.status(401).json("Wrong credentials! no User in DB") //verifica se existe usuário
+    await User.findOne({username:req.body.username}).then((user) => {
         const hashPassw = CryptoJS.AES.decrypt(user.password, process.env.PASS_SECRET)
         const passw = hashPassw.toString(CryptoJS.enc.Utf8)
-        passw !== req.body.password && res.status(401).json("Wrong credentials! passwd") //se existe usuário e se a senha esta correta
-        const accessTk = jwt.sign({
-            id:user._id, 
-            isAdmin: user.isAdmin,
+        if(!user && !res.status(200) || passw !== req.body.password && !res.status(200)){
+            console.log("Wrong credentials! No user in DB or passwd invalid") //verifica se existe usuário
+        }
+        else{       
+            const accessTk = jwt.sign({
+                id:user._id, 
+                isAdmin: user.isAdmin,
 
-        }, 
-        process.env.JWT_SECRET,
-        {expiresIn:"3d"}
-        )
-        const {password, ...others} = user._doc
-        res.status(200).json({...others, accessTk})
-    }catch(err){
+            }, 
+            process.env.JWT_SECRET,
+            {expiresIn:"3d"}
+            )
+            const {password, ...others} = user._doc
+            res.status(200).json({...others, accessTk})
+        }
+    }).catch((err) => {
         res.status(500).json(err)
-    }
+    })
 })
 
 module.exports = router

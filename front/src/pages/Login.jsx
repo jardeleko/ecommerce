@@ -1,5 +1,8 @@
-import styled from 'styled-components'
-import {mobile} from '../responsive'
+import styled from 'styled-components';
+import {mobile} from '../responsive';
+import {useState} from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { login } from '../redux/apiCalls';
 
 const Container = styled.div`
     width: 100vw;
@@ -73,24 +76,44 @@ const Button = styled.button`
     &:hover{
         background-color:#54a85c;
     }
+    &:disabled{
+        background-color: #54a85c;
+        color: #54a85c;
+        cursor: not-allowed;
+    }
+`
+const Error = styled.span`
+    font-weight: bold;
+    color:red;
+    margin:5px;
 `
 
-
 const Login = () => {
-  return (
-    <Container>
-        <Wrapper>
-            <Title>SIGN IN </Title>
-            <Form>
-                <Input placeholder="username" type="text" name="username"/>
-                <Input placeholder="password" type="password" name="password"/>
-                <Button>LOGIN</Button>
-                <P>DO NOT YOU REMEMBER THE PASSWORD?</P>
-                <Link href='/Register'>CREATE A NEW ACCOUNT</Link>
-            </Form>
-        </Wrapper>        
-    </Container>
-  )
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const dispatch = useDispatch();
+    const { isFetching, error } = useSelector((state) => state.user);
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+        login(dispatch, {username, password})
+    }
+    
+    return (
+        <Container>
+            <Wrapper>
+                <Title>SIGN IN </Title>
+                <Form>
+                    <Input placeholder="username" type="text" onChange={(e) => setUsername(e.target.value)}/>
+                    <Input placeholder="password" type="password" onChange={(e) => setPassword(e.target.value)}/>
+                    <Button onClick={handleLogin} disabled={isFetching}>LOGIN</Button>
+                    {error && <Error> Wrong credentials, try again! </Error>}
+                    <P>DO NOT YOU REMEMBER THE PASSWORD?</P>
+                    <Link href='/Register'>CREATE A NEW ACCOUNT</Link>
+                </Form>
+            </Wrapper>        
+        </Container>
+    )
 }
 
 export default Login;
