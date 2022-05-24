@@ -11,14 +11,13 @@ router.post("/register", async (req, res) => {
         email : req.body.email,
         password : CryptoJS.AES.encrypt(req.body.password, process.env.PASS_SECRET).toString(),
     })
-    try{
-        const savedUser = await newUser.save()
+    await newUser.save().then((savedUser) => {
         res.status(201).json(savedUser)
         console.log(savedUser)
-    }catch(err){
+    }).catch((err) => {
         res.status(500).json(err)
         console.log("Problem on saved" + err)
-    }
+    })
 })
 
 router.post("/login", async (req, res) => {

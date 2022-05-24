@@ -5,7 +5,7 @@ const TK = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzA1MDE3YzQ3MmEwMTM
 
 const userRequest = axios.create({
     baseURL:BASE_URL,
-    header:{token:`Bearer ${TK}`}
+    headers:{token:`Bearer ${TK}`}
 })
 
-export default userRequest
+export default userRequest;

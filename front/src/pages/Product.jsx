@@ -1,15 +1,17 @@
-import styled from 'styled-components'
-import Navbar from '../components/Navbar'
-import  Announcement  from '../components/Announcement'
-import Newsletter from '../components/Newsletter'
-import Footer from '../components/Footer'
-import { Add, Remove } from '@material-ui/icons'
-import {mobile} from '../responsive'
-import { useLocation } from 'react-router'
+import styled from 'styled-components';
+import Navbar from '../components/Navbar';
+import  Announcement  from '../components/Announcement';
+import Newsletter from '../components/Newsletter';
+import Footer from '../components/Footer';
+import { Add, Remove } from '@material-ui/icons';
+import {mobile} from '../responsive';
+import { useLocation } from 'react-router';
 import {React, useEffect, useState} from 'react';
 import publicRequest from '../request/publicMethods';
+import userRequest from '../request/requestMethods';
 import { addProduct } from '../redux/cartRedux';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div``
 
@@ -127,6 +129,9 @@ const Product = () => {
     const [color, setColor] = useState('');
     const [size, setSize] = useState('');
     const dispatch = useDispatch();
+    const currentUser = useSelector((state) => state.user.currentUser);
+    // const [cartId, setCardId] = useState(null);
+    const history = useNavigate()
 
     useEffect(()=> {
         const getProduct = async () => {
@@ -138,6 +143,7 @@ const Product = () => {
         }
         getProduct();
     },[id])
+
     const handleQuantity = (type) => {
         if(type === 'dec'){
             setQuantity(quantity-1)
@@ -146,8 +152,19 @@ const Product = () => {
             setQuantity(quantity+1)
         }
     }
-    const handleClick = () => { 
+
+    const handleClick = async () => { 
         dispatch(addProduct({ ...product, quantity, color, size }));
+        await userRequest.post("/cart",
+        {
+            userId: currentUser._id,
+            products: {productId:id, quantity:quantity},
+        }
+        ).then((res) => {
+            history("/cart", {state:{idCart:res.data._id}})  
+        }).catch((err) => {
+            console.log("this error "+ err)
+        }) 
     }
 
   return (

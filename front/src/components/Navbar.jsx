@@ -6,6 +6,7 @@ import { mobile } from '../responsive';
 import {Link} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
+
 const LS = styled(Link)`
     color: #ffffff;
     text-decoration:none;
@@ -94,6 +95,7 @@ const Navbar = () => {
                 <Right>
                     <MenuItem> <LS to={`/register`}>REGISTER</LS></MenuItem>
                     <MenuItem><LS to={`/login`}>SIGN IN</LS></MenuItem>
+                    <MenuItem><LS to={`/login`}>LOGOUT</LS></MenuItem>
                     <MenuItem>
                     <LS to={`/cart`}>
                         <Badge 

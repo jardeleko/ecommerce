@@ -2,13 +2,14 @@ import Navbar from '../components/Navbar';
 import Announcement from '../components/Announcement';
 import Footer from '../components/Footer';
 import styled from 'styled-components';
-import { Add, Remove } from '@material-ui/icons';
+import { RestoreFromTrash } from '@material-ui/icons';
 import { mobile } from '../responsive';
 import { useSelector } from 'react-redux';
 import StripeCheckout from 'react-stripe-checkout';
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import userRequest from '../request/requestMethods';
+// import { useLocation } from 'react-router';
 
 const KEY = process.env.REACT_APP_STRIPE
 
@@ -79,9 +80,8 @@ const Details = styled.div`
     flex-direction:column;
     justify-content:space-around;
 `
-const ProductName = styled.span`
-    
-`
+const ProductName = styled.span``
+
 const ProductId = styled.span``
 
 const ProductColor = styled.span`
@@ -158,9 +158,22 @@ const Button = styled.button`
 `
 
 const Cart = () => {
-    const cart = useSelector((state)=> state.cart);
+    const cart = useSelector((state) => state.cart);
+    // const location = useLocation();
+    // //in Cart.jsx I sent data and cart. Please check that page for the changes.(in video it's only data)
+    // const idCart = location.state.idCart;
+    // console.log(idCart)
     const [stripeToken, setStripeToken] = useState(null);
     const history = useNavigate()
+    
+    const handleClick = async () => { 
+        console.log(cart._id)
+        await userRequest.delete(`/cart?id=${cart._id}`).then((res) => {
+            console.log("deletou o carrinho"+ res)
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
 
     const onToken = (token) =>{
         setStripeToken(token);
@@ -172,7 +185,7 @@ const Cart = () => {
             tokenId: stripeToken.id, 
             amount: localPrice,
             }).then((res) => {
-                history("/success", {data:res.data})  
+                history("/success", {state:{data:res.data}})  
                 console.log(res.data)  
             }).catch((err) => {
                 console.log(err);
@@ -209,10 +222,9 @@ const Cart = () => {
                             </Details>
                         </ProductDetail>
                         <PriceDetail>
-                            <ProductAmountContainer>
-                                <Add/>
-                                <ProductAmount> {product.quantity} </ProductAmount>
-                                <Remove/>
+                            <ProductAmountContainer>                        
+                                    <ProductAmount> {product.quantity} </ProductAmount>
+                                        <RestoreFromTrash style={{marginRight:"10px", color:"#ed1c3c", cursor:"pointer"}} onClick={handleClick}/>
                             </ProductAmountContainer>
                             <ProductPrice>$ {product.price * product.quantity}</ProductPrice>
                         </PriceDetail>
