@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken')
 
 router.post("/register", async (req, res) => {
     const newUser = new User({
+        name: req.body.name,
         username : req.body.username,
         email : req.body.email,
         password : CryptoJS.AES.encrypt(req.body.password, process.env.PASS_SECRET).toString(),
@@ -24,20 +25,21 @@ router.post("/login", async (req, res) => {
     await User.findOne({username:req.body.username}).then((user) => {
         const hashPassw = CryptoJS.AES.decrypt(user.password, process.env.PASS_SECRET)
         const passw = hashPassw.toString(CryptoJS.enc.Utf8)
-        if(!user && !res.status(200) || passw !== req.body.password && !res.status(200)){
-            console.log("Wrong credentials! No user in DB or passwd invalid") //verifica se existe usuário
-        }
-        else{       
+        const confirm = req.body.password
+        if(passw == confirm){
             const accessTk = jwt.sign({
                 id:user._id, 
                 isAdmin: user.isAdmin,
 
             }, 
             process.env.JWT_SECRET,
-            {expiresIn:"3d"}
+            {expiresIn:'1d'}
             )
             const {password, ...others} = user._doc
             res.status(200).json({...others, accessTk})
+        }
+        else{       
+            console.log("Wrong credentials! No user in DB or passwd invalid") //verifica se existe usuário
         }
     }).catch((err) => {
         res.status(500).json(err)

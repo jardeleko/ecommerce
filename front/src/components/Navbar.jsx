@@ -4,9 +4,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { mobile } from '../responsive';
 import {Link} from 'react-router-dom';
-import { useSelector } from 'react-redux';
-
-
+import { useSelector, useDispatch } from 'react-redux';
+import { logOut } from '../redux/userRedux';
+import { resetSkill } from '../redux/cartRedux';
 const LS = styled(Link)`
     color: #ffffff;
     text-decoration:none;
@@ -79,6 +79,14 @@ const MenuItem = styled.div`
 
 const Navbar = () => {
     const quantity = useSelector((state) => state.cart.quantity);
+    const currentUser = useSelector((state) => state.user.currentUser);
+    const dispatch = useDispatch()
+    const handleEvent = (e) => {
+        e.preventDefault()
+        dispatch(resetSkill())
+        dispatch(logOut())
+    }
+
     return (
         <Container>
             <Wrapper>
@@ -94,8 +102,10 @@ const Navbar = () => {
                 </Center>
                 <Right>
                     <MenuItem> <LS to={`/register`}>REGISTER</LS></MenuItem>
-                    <MenuItem><LS to={`/login`}>SIGN IN</LS></MenuItem>
-                    <MenuItem><LS to={`/login`}>LOGOUT</LS></MenuItem>
+                   {currentUser 
+                        ? <MenuItem><LS to={`/login`} onClick={handleEvent}>LOGOUT</LS></MenuItem>
+                        : <MenuItem><LS to={`/login`}>SIGN IN</LS></MenuItem>
+                   }
                     <MenuItem>
                     <LS to={`/cart`}>
                         <Badge 

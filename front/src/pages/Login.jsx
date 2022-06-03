@@ -92,8 +92,7 @@ const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const dispatch = useDispatch();
-    const { isFetching, error } = useSelector((state) => state.user);
-
+    const { error } = useSelector((state) => state.user);
     const handleLogin = (e) => {
         e.preventDefault();
         login(dispatch, {username, password})
@@ -106,7 +105,7 @@ const Login = () => {
                 <Form>
                     <Input placeholder="username" type="text" onChange={(e) => setUsername(e.target.value)}/>
                     <Input placeholder="password" type="password" onChange={(e) => setPassword(e.target.value)}/>
-                    <Button onClick={handleLogin} disabled={isFetching}>LOGIN</Button>
+                    <Button onClick={handleLogin} >LOGIN</Button>
                     {error && <Error> Wrong credentials, try again! </Error>}
                     <P>DO NOT YOU REMEMBER THE PASSWORD?</P>
                     <Link href='/Register'>CREATE A NEW ACCOUNT</Link>

@@ -1,5 +1,8 @@
 import styled from 'styled-components'
 import {mobile} from '../responsive'
+import publicRequest from '../request/publicMethods'
+import { useState } from 'react'
+import { useNavigate } from 'react-router'
 
 const Container = styled.div`
     width: 100vw;
@@ -38,7 +41,8 @@ const Input = styled.input`
     flex:1;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size:15px;
-    min-width:40%;
+    min-width:50%;
+    align-items: center;
     margin: 20px 10px 0px 0px;
     border:1px solid lightslategray;
     padding: 10px;
@@ -47,6 +51,7 @@ const Input = styled.input`
 `
 const Div = styled.div`
     margin-bottom: 10px;
+    text-align:center;
 `
 
 const Agreement = styled.span`
@@ -84,27 +89,54 @@ const Button = styled.button`
 
 
 const Register = () => {
-  return (
-    <Container>
-        <Wrapper>
-            <Title>CREATE ACCOUNT</Title>
-            <Form>
-                <Div>
-                    <Input placeholder="name" name="name"/>
-                    <Input placeholder="last name" type="text" name="lastname" />
-                    <Input placeholder="email" type="email" name="email"/>
-                    <Input placeholder="username" type="text" name="username"/>
-                    <Input placeholder="password" type="password" name="password"/>
-                    <Input placeholder="confirm password" type="password" name="confirm"/>
-                </Div>
-                <Agreement>
-                    If you have account<Link href='/Login'> click here</Link> to SIGN IN.
-                </Agreement>
-                <Button>CREATE</Button>
-            </Form>
-        </Wrapper>        
-    </Container>
-  )
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [nick, setUsername] = useState("");
+    const [passw, setPassword] = useState("");
+    const [confirm, setConfirm] = useState("");
+    let history = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()   
+        if(confirm === passw){
+            await publicRequest.post('/auth/register', {
+                name: name,
+                email: email,
+                username: nick,
+                password: passw 
+            }).then((res) => {
+                console.log(res.data)
+                alert('Create Success ✓, please logon now')
+                history('/login')
+            }).catch((err) => {
+                console.log("error in register:" + JSON.stringify(err))
+            })
+        }
+        else {
+            alert("Please, need a combine pass!")
+        }     
+    }
+    const content = (
+        <Container>
+            <Wrapper>
+                <Title>CREATE ACCOUNT</Title>
+                <Form onSubmit={handleSubmit}>
+                    <Div>
+                        <Input placeholder="name" type='text' onChange={(e) => setName(e.target.value)}/>
+                        <Input placeholder="email" type="email" onChange={(e) => setEmail(e.target.value)}/>
+                        <Input placeholder="username" type="text" onChange={(e) => setUsername(e.target.value)}/>
+                        <Input placeholder="password" type="password" onChange={(e) => setPassword(e.target.value)}/>
+                        <Input placeholder="confirm password" type="password"  onChange={(e) => setConfirm(e.target.value)}/>
+                    </Div>
+                    <Agreement>
+                        If you have account<Link href='/Login'> click here</Link> to SIGN IN.
+                    </Agreement>
+                    <Button type='submit'>CREATE</Button>
+                </Form>
+            </Wrapper>        
+        </Container>
+      )
+    return content
 }
 
 export default Register;

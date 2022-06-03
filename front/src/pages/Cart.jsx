@@ -30,7 +30,7 @@ const Top = styled.div`
     padding: 20px;
 `
 
-const TopButton = styled.button`
+const TopButton = styled.a`
     padding: 10px;
     font-weight: 600;
     cursor:pointer;
@@ -175,9 +175,10 @@ const Cart = () => {
         })
     }
 
-    const onToken = (token) =>{
+    const onToken = (token) => {
         setStripeToken(token);
     }
+    
     useEffect(()=> {
         const makeRequest = async () => {
             const localPrice = cart.total * 100;
@@ -201,7 +202,7 @@ const Cart = () => {
             <Wrapper>
             <Title>YOUR BAG</Title>
                 <Top> 
-                <TopButton>CONTINUE SHOPPING</TopButton>
+                <TopButton href='/'>CONTINUE SHOPPING</TopButton>
                 <TopTexts>
                     <TopText>Shopping Bag (2)</TopText>
                     <TopText>Your Wishlist (0)</TopText>
