@@ -7,6 +7,8 @@ import {Link} from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logOut } from '../redux/userRedux';
 import { resetSkill } from '../redux/cartRedux';
+import { useNavigate } from 'react-router';
+
 const LS = styled(Link)`
     color: #ffffff;
     text-decoration:none;
@@ -80,11 +82,18 @@ const MenuItem = styled.div`
 const Navbar = () => {
     const quantity = useSelector((state) => state.cart.quantity);
     const currentUser = useSelector((state) => state.user.currentUser);
+    const history = useNavigate()
     const dispatch = useDispatch()
     const handleEvent = (e) => {
         e.preventDefault()
         dispatch(resetSkill())
         dispatch(logOut())
+        history('/login')
+    }
+    const miFunc = (name) => {
+        const [fisrt, ...others] = name.split(" ");
+        others.push('.') 
+        return fisrt.toUpperCase()
     }
 
     return (
@@ -101,11 +110,15 @@ const Navbar = () => {
                     <Logo><LS to={`/`}> SAN FLAME</LS></Logo>
                 </Center>
                 <Right>
-                    <MenuItem> <LS to={`/register`}>REGISTER</LS></MenuItem>
-                   {currentUser 
+                    {currentUser 
+                        ? <MenuItem>{miFunc(currentUser.name)}</MenuItem>
+                        : <MenuItem> <LS to={`/register`}>REGISTER</LS></MenuItem>                      
+
+                    }
+                    {currentUser 
                         ? <MenuItem><LS to={`/login`} onClick={handleEvent}>LOGOUT</LS></MenuItem>
                         : <MenuItem><LS to={`/login`}>SIGN IN</LS></MenuItem>
-                   }
+                    }
                     <MenuItem>
                     <LS to={`/cart`}>
                         <Badge 

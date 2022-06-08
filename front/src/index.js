@@ -7,10 +7,14 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-root.render(
+const AppView = () => (
     <Provider store={store}> 
         <PersistGate loading={null} persistor={persistor}>
             <App /> 
         </PersistGate>
     </Provider>
 );
+
+setTimeout(() => {
+	root.render(<AppView />);
+}, 2500);

@@ -1,5 +1,5 @@
-import {createSlice} from "@reduxjs/toolkit";
-import storage from 'redux-persist/lib/storage';
+import {createSlice} from "@reduxjs/toolkit"
+import storage from 'redux-persist/lib/storage'
 
 const cartSlice = createSlice({
     name:"cart",
@@ -19,9 +19,29 @@ const cartSlice = createSlice({
             state.quantity = 0
             state.products = []
             state.total = 0
+        },
+        removeProduct: (state, action) => {
+            const {product} = action.payload
+            let lexval = 0
+            for (let i = 0; i < state.quantity; i++) {
+                if(product._idCart === state.products[i]._idCart){
+                    lexval = i
+                    console.log("a posição a ser removidade é: " +lexval)
+                }
+                else {
+                    console.log('produto nao econtrado')
+                }
+            }
+            let decrement = product.price * product.quantity
+            state.products.splice(lexval, 1)
+            state.products = [...state.products]
+            state.quantity -= 1
+            if(state.quantity <= 0) state.quantity = 0
+            state.total -= decrement
+            if(state.total <= 0) state.total = 0
         }
     },
 });
 
-export const { addProduct, resetSkill } = cartSlice.actions;
+export const { addProduct, resetSkill, removeProduct } = cartSlice.actions;
 export default cartSlice.reducer;

@@ -1,15 +1,17 @@
-import Navbar from '../components/Navbar';
-import Announcement from '../components/Announcement';
-import Footer from '../components/Footer';
-import styled from 'styled-components';
-import { RestoreFromTrash } from '@material-ui/icons';
-import { mobile } from '../responsive';
-import { useSelector } from 'react-redux';
-import StripeCheckout from 'react-stripe-checkout';
-import { useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom";
-import userRequest from '../request/requestMethods';
-// import { useLocation } from 'react-router';
+import Navbar from '../components/Navbar'
+import Announcement from '../components/Announcement'
+import Footer from '../components/Footer'
+import styled from 'styled-components'
+import { RestoreFromTrash } from '@material-ui/icons'
+import { mobile } from '../responsive'
+import { useSelector, useDispatch } from 'react-redux'
+import StripeCheckout from 'react-stripe-checkout'
+import { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom"
+import { resetSkill, removeProduct } from '../redux/cartRedux'
+import publicRequest from '../request/publicMethods'
+import axios from 'axios'
+
 
 const KEY = process.env.REACT_APP_STRIPE
 
@@ -81,8 +83,6 @@ const Details = styled.div`
     justify-content:space-around;
 `
 const ProductName = styled.span``
-
-const ProductId = styled.span``
 
 const ProductColor = styled.span`
     width: 20px;
@@ -158,18 +158,21 @@ const Button = styled.button`
 `
 
 const Cart = () => {
-    const cart = useSelector((state) => state.cart);
-    // const location = useLocation();
-    // //in Cart.jsx I sent data and cart. Please check that page for the changes.(in video it's only data)
-    // const idCart = location.state.idCart;
-    // console.log(idCart)
+    const cart = useSelector((state) => state.cart)
+    const currentUser = useSelector((state) => state.user.currentUser);
+    const dispatch = useDispatch()
     const [stripeToken, setStripeToken] = useState(null);
     const history = useNavigate()
-    
-    const handleClick = async () => { 
-        console.log(cart._id)
-        await userRequest.delete(`/cart?id=${cart._id}`).then((res) => {
-            console.log("deletou o carrinho"+ res)
+    const BASE_URL = "http://localhost:3030/api"
+    const localRequest = axios.create({
+        baseURL: BASE_URL,
+        headers: {token: `Bearer ${currentUser.accessTk}`}
+    })
+
+    const handleClick = async (product) => { 
+        await localRequest.delete(`/cart/${product._idCart}`).then((res) => {
+            window.location.reload(true);
+            dispatch(removeProduct({product}))
         }).catch((err) => {
             console.log(err)
         })
@@ -178,11 +181,15 @@ const Cart = () => {
     const onToken = (token) => {
         setStripeToken(token);
     }
+    const handleReset = (e) =>{
+        e.preventDefault()
+        dispatch(resetSkill())
+    }
     
     useEffect(()=> {
         const makeRequest = async () => {
             const localPrice = cart.total * 100;
-        await userRequest.post("/checkout/payment", { 
+        await publicRequest.post("/checkout/payment", { 
             tokenId: stripeToken.id, 
             amount: localPrice,
             }).then((res) => {
@@ -204,10 +211,10 @@ const Cart = () => {
                 <Top> 
                 <TopButton href='/'>CONTINUE SHOPPING</TopButton>
                 <TopTexts>
-                    <TopText>Shopping Bag (2)</TopText>
+                    <TopText>Shopping Bag ({cart.quantity})</TopText>
                     <TopText>Your Wishlist (0)</TopText>
                 </TopTexts>
-                <TopButton type="filled">CHECKOUT NOW</TopButton>
+                <TopButton type="filled" onClick={handleReset}>CLEAN CART</TopButton>
                 </Top>
             <Bottom> 
                 <Info>
@@ -217,7 +224,6 @@ const Cart = () => {
                             <Image src={product.img}/>
                             <Details>
                                 <ProductName><b>Product: </b>{product.title}</ProductName>
-                                <ProductId><b>ID: </b> {product._id}</ProductId>
                                 <ProductColor color= {product.color}/>
                                 <ProductSize><b>Size: </b>  {product.size}</ProductSize>
                             </Details>
@@ -225,8 +231,8 @@ const Cart = () => {
                         <PriceDetail>
                             <ProductAmountContainer>                        
                                     <ProductAmount> {product.quantity} </ProductAmount>
-                                        <RestoreFromTrash style={{marginRight:"10px", color:"#ed1c3c", cursor:"pointer"}} onClick={handleClick}/>
-                            </ProductAmountContainer>
+                                        <RestoreFromTrash style={{marginRight:"10px", color:"#ed1c3c", cursor:"pointer"}} onClick={() => handleClick(product)}/>
+                                    </ProductAmountContainer>
                             <ProductPrice>$ {product.price * product.quantity}</ProductPrice>
                         </PriceDetail>
                     </Product>                    
@@ -241,7 +247,7 @@ const Cart = () => {
                     </SummaryItem>
                     <SummaryItem>
                         <SummaryItemText>Estimated Shipping</SummaryItemText>
-                        <SummaryItemText>$ 5.90</SummaryItemText>
+                        <SummaryItemText>$ 0.00 (free shipping)</SummaryItemText>
                     </SummaryItem>
                     <SummaryItem>
                         <SummaryItemText>Shipping Discount</SummaryItemText>
@@ -249,18 +255,18 @@ const Cart = () => {
                     </SummaryItem>
                     <SummaryItem type="total">
                         <SummaryItemText>Total</SummaryItemText>
-                        <SummaryItemText>$ {cart.total + (5.90)} </SummaryItemText>
+                        <SummaryItemText>$ {cart.total} </SummaryItemText>
                     </SummaryItem>
                     <StripeCheckout
-                    name="San Flame"
-                    image="https://images.vexels.com/media/users/3/200093/isolated/preview/596f0d8cb733b17268752d044976f102-icone-de-sacola-de-compras.png"
-                    billingAddress
-                    shippingAddress
-                    description={`TOTAL IS $ ${cart.total}`}
-                    amount={cart.total*100}
-                    token={onToken}
-                    stripeKey={KEY}
-                    >
+                        name="San Flame"
+                        image="https://images.vexels.com/media/users/3/200093/isolated/preview/596f0d8cb733b17268752d044976f102-icone-de-sacola-de-compras.png"
+                        billingAddress
+                        shippingAddress
+                        description={`TOTAL IS $ ${cart.total}`}
+                        amount={cart.total*100}
+                        token={onToken}
+                        stripeKey={KEY}
+                        >                       
                         <Button>BUY NOW</Button>
                     </StripeCheckout>    
                 </Summary>

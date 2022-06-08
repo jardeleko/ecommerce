@@ -1,17 +1,17 @@
-import styled from 'styled-components';
-import Navbar from '../components/Navbar';
-import  Announcement  from '../components/Announcement';
-import Newsletter from '../components/Newsletter';
-import Footer from '../components/Footer';
-import { Add, Remove } from '@material-ui/icons';
-import {mobile} from '../responsive';
-import { useLocation } from 'react-router';
-import {React, useEffect, useState} from 'react';
-import publicRequest from '../request/publicMethods';
-import userRequest from '../request/requestMethods';
-import { addProduct } from '../redux/cartRedux';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components'
+import Navbar from '../components/Navbar'
+import  Announcement  from '../components/Announcement'
+import Newsletter from '../components/Newsletter'
+import Footer from '../components/Footer'
+import { Add, Remove } from '@material-ui/icons'
+import {mobile} from '../responsive'
+import { useLocation } from 'react-router'
+import {React, useEffect, useState} from 'react'
+import publicRequest from '../request/publicMethods'
+import { addProduct } from '../redux/cartRedux'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const Container = styled.div``
 
@@ -130,9 +130,12 @@ const Product = () => {
     const [size, setSize] = useState('');
     const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.user.currentUser);
-    // const [cartId, setCardId] = useState(null);
     const history = useNavigate()
-
+    const BASE_URL = "http://localhost:3030/api"
+    const localRequest = axios.create({
+        baseURL: BASE_URL,
+        headers: {token: `Bearer ${currentUser.accessTk}`}
+    })
     useEffect(()=> {
         const getProduct = async () => {
         await publicRequest.get("/products/find/"+id).then((res) => {
@@ -154,17 +157,16 @@ const Product = () => {
     }
 
     const handleClick = async () => { 
-        dispatch(addProduct({ ...product, quantity, color, size }));
-        await userRequest.post("/cart",
-        {
+        await localRequest.post("/cart", {
             userId: currentUser._id,
-            products: {productId:id, quantity:quantity},
-        }
-        ).then((res) => {
-            history("/cart", {state:{idCart:res.data._id}})  
+            products: {productId:id, quantity:quantity},    
+        }).then((res) => {
+            const _idCart = res.data._id
+            dispatch(addProduct({_idCart, ...product, quantity, color, size}), history("/cart"));  
         }).catch((err) => {
             console.log("this error "+ err)
         }) 
+        
     }
 
   return (
@@ -179,9 +181,9 @@ const Product = () => {
                 <Title>{product.title}</Title>
                 <Desc>{product.desc}</Desc>
                 <Price>$ {product.price}</Price>
-                <FilterContainer>
-                    <Filter>
-                        <FilterTitle>Color</FilterTitle>
+                <FilterContainer >
+                    <Filter style={{backgroundColor:"#f2f2f2", borderRadius:'10px', border:'0.1px solid grey'}}>
+                        <FilterTitle style={{margin:'3px'}}>Color</FilterTitle>
                         {product.color?.map((c)=>(
                             <FilterColor color={c} key={c} onClick={()=>setColor(c)}/>
                         ))}
