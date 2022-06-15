@@ -1,4 +1,4 @@
 # ecommerce
-Projeto ecommerce utilizando React e mongoDB, elaborado por Lama Dev.
+Projeto ecommerce utilizando React e mongoDB, elaborado por Lama Dev e finalizado por mim (etapas não concluídas no tutorial).
 
-Necessario incluir rotas e conectar, front<>back
+Necessario desenvolver uma página de administração do site! 
