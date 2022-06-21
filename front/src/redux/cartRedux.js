@@ -26,10 +26,6 @@ const cartSlice = createSlice({
             for (let i = 0; i < state.quantity; i++) {
                 if(product._idCart === state.products[i]._idCart){
                     lexval = i
-                    console.log("a posição a ser removidade é: " +lexval)
-                }
-                else {
-                    console.log('produto nao econtrado')
                 }
             }
             let decrement = product.price * product.quantity

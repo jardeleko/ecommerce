@@ -171,7 +171,6 @@ const Cart = () => {
 
     const handleClick = async (product) => { 
         await localRequest.delete(`/cart/${product._idCart}`).then((res) => {
-            window.location.reload(true);
             dispatch(removeProduct({product}))
         }).catch((err) => {
             console.log(err)
@@ -272,6 +271,7 @@ const Cart = () => {
                 </Summary>
             </Bottom>
             </Wrapper>
+            <br /><br /><br />
             <Footer/>
         </Container>
   )

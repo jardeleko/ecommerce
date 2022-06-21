@@ -55,10 +55,11 @@ const Link = styled.a`
     text-decoration: silver;
     font-weight:bold;
     margin-top: 5px;
-    color: inherit;;
+    color: #54a85c !important;
      &:hover{        
-        color:#54a85c;
-        text-decoration:underline;
+        color:#54a85c !important;
+        text-decoration: none;
+        opacity: 0.8;
     }
     cursor:pointer;
 `

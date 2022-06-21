@@ -1,87 +1,24 @@
-import { Search, ShoppingCartOutlined } from '@material-ui/icons';
-import Badge from '@material-ui/core/Badge';
-import React from 'react';
-import styled from 'styled-components';
-import { mobile } from '../responsive';
-import {Link} from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { logOut } from '../redux/userRedux';
-import { resetSkill } from '../redux/cartRedux';
-import { useNavigate } from 'react-router';
+import { ShoppingCartOutlined } from '@material-ui/icons'
+import Badge from '@material-ui/core/Badge'
+import styled from 'styled-components'
+import {Link} from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { logOut } from '../redux/userRedux'
+import { resetSkill } from '../redux/cartRedux'
+import { useNavigate } from 'react-router'
 
 const LS = styled(Link)`
-    color: #ffffff;
-    text-decoration:none;
+    cursor:pointer;
     font-weight:bold;
     &:hover{        
-        color:#54a85c;
+        color: #fec400 !important;
         text-decoration:none;
     }
-    cursor:pointer;
-
-`;
-
-const Container = styled.div`
-    height: 60px;
-    background-color: #3a3736;
-    color: #ffffff;
-    ${mobile({height:"50px"})}
 `
-const Wrapper = styled.div`
-    padding:10px 20px;
-    display:flex;
-    justify-content: space-between;
-    ${mobile({padding:"10px 0px"})}
-`
-const Language = styled.div`
-    font-size: 14px;
-    cursor: pointer;
-    ${mobile({display:"none"})}
-`
-const Left = styled.div`
-    flex: 1;
-    display:flex;
-    align-items:center; 
-`
-const Center = styled.div`
-    flex: 0.3;
-`
-const Right = styled.div`
-    flex: 1;
-    display: flex;
-    align-items: center; 
-    justify-content: flex-end;
-    margin-left: 25px;
-    ${mobile({flex:"1.1",justifyContent:"center"})}
-
-`
-const SearchContainer = styled.div`
-    padding: 5px;
-    margin-left:25px;
-    border:0.5px solid lightgray;
-    display:flex;
-    align-items:center;  
-    background-color: white;
-`
-const Input = styled.input`
-    border:none;
-    ${mobile({width:"50px"})}
-`
-const Logo = styled.h1`
-    font-weight: bold;
-    ${mobile({fontSize:"16px"})}
-
-`
-const MenuItem = styled.div`
-    font-size: 14px;
-    cursor: pointer;
-    margin-left:25px;
-    ${mobile({fontSize:"12px", marginLeft:"10px"})}
-`
-
 const Navbar = () => {
     const quantity = useSelector((state) => state.cart.quantity);
-    const currentUser = useSelector((state) => state.user.currentUser);
+    const currentUser = useSelector((state) => state.user.currentUser); 
+
     const history = useNavigate()
     const dispatch = useDispatch()
     const handleEvent = (e) => {
@@ -94,43 +31,93 @@ const Navbar = () => {
         const [fisrt, ...others] = name.split(" ");
         others.push('.') 
         return fisrt.toUpperCase()
-    }
+    }   
 
-    return (
-        <Container>
-            <Wrapper>
-                <Left>
-                    <Language>EN</Language>
-                        <SearchContainer> 
-                            <Input placeholder='search'/>
-                            <Search style={{color:"gray", fontSize:16}}/>
-                        </SearchContainer>
-                </Left>
-                <Center>
-                    <Logo><LS to={`/`}> SAN FLAME</LS></Logo>
-                </Center>
-                <Right>
+    const navbar = ( 
+    <nav className="navbar navbar-expand-lg navbar-dark">  
+        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"  aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon">
+            </span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarNav">
+            { currentUser 
+            ? <ul className="navbar-nav mr-auto">
+                <li className="nav-item dropdown">
+                    <a className="nav-link dropdown-toggle" data-toggle="dropdown" href="/" role="button" aria-haspopup="true" aria-expanded="false">
+                        {miFunc(currentUser.name)}                      
+                    </a>
+                    <div className="dropdown-menu"> 
+                    <a className="dropdown-item" href="/profile"> Perfil</a>
+                    <a className="dropdown-item" href="/orders"> Orders</a>
+                    </div>
+                </li>
+              </ul>
+            : <ul className="navbar-nav mr-auto">
+                <li className="nav-item">
+                    <a className="nav-link" href="/register">REGISTER </a>
+                </li>
+              </ul>
+            }
+            <ul className="navbar-nav ml-left">
+                <li className="nav-item dropdown">
+                    <a className="nav-link dropdown-toggle" data-toggle="dropdown" href="/" role="button" aria-haspopup="true" aria-expanded="false">
+                    WOMEN CLOTHES
+                    </a>
+                    <div className="dropdown-menu">
+                        <Link className="dropdown-item" to={'/products/t-shirt'}>Tshirts</Link>
+                        <Link className="dropdown-item" to={'/products/minidress'}>Mini Dress</Link>
+                        <Link className="dropdown-item" to={'/products/dress'}>Dresses</Link>
+                        <Link className="dropdown-item" to={'/products/shorts'}>Shorts</Link>
+                        <Link className="dropdown-item" to={'/products/jacket'}>Jackets</Link>
+                        <Link className="dropdown-item" to={'/products/jeans'}>Jeans</Link>
+                        <Link className="dropdown-item" to={'/products/accessories'}>Accessories</Link>
+                        <div className="dropdown-divider"></div>
+                            <Link className="dropdown-item" to={'/products/women'}>ALL ITEMS</Link>
+                    </div>
+                </li>
+            </ul>
+            <div className="navbar-nav mx-auto">
+                <h2>
+                    <LS to={`/`}> SANTA COLINA </LS>
+                </h2>
+            </div>
+            <ul className="navbar-nav ml-right">
+                <li className="nav-item dropdown">
+                    <a className="nav-link dropdown-toggle" data-toggle="dropdown" href="/" role="button" aria-haspopup="true" aria-expanded="false">
+                    MEN CLOTHES
+                    </a>
+                    <div className="dropdown-menu">
+                        <Link className="dropdown-item" to={'/products/shirt'}>Tshirts</Link>
+                        <Link className="dropdown-item" to={'/products/polo'}>Polo</Link>
+                        <Link className="dropdown-item" to={'/products/bermuda'}>Bermuda</Link>
+                        <Link className="dropdown-item" to={'/products/suit'}>Suits</Link>
+                        <Link className="dropdown-item" to={'/products/jacket'}>Jackets</Link>
+                        <Link className="dropdown-item" to={'/products/jeans'}>Jeans</Link>
+                        <Link className="dropdown-item" to={'/products/accessories'}>Accessories</Link>
+                        <div className="dropdown-divider"></div>
+                            <Link className="dropdown-item" to={'/products/man'}>ALL ITEMS</Link> 
+                    </div>
+                </li>
+            </ul>
+            <ul className="navbar-nav ml-auto">    
+                <li className="nav-item">
                     {currentUser 
-                        ? <MenuItem>{miFunc(currentUser.name)}</MenuItem>
-                        : <MenuItem> <LS to={`/register`}>REGISTER</LS></MenuItem>                      
-
+                        ? <a className="nav-link" aria-current="page" href="/" onClick={handleEvent}>LOGOUT</a>
+                        : <a className="nav-link" aria-current="page" href="/login">SIGN IN</a>
                     }
-                    {currentUser 
-                        ? <MenuItem><LS to={`/login`} onClick={handleEvent}>LOGOUT</LS></MenuItem>
-                        : <MenuItem><LS to={`/login`}>SIGN IN</LS></MenuItem>
-                    }
-                    <MenuItem>
-                    <LS to={`/cart`}>
+                </li>
+                <li className="nav-item" >
+                    <a className="nav-link" href='/cart' tabindex="-1">
                         <Badge 
                             badgeContent={quantity} color="primary">
                             <ShoppingCartOutlined />
                         </Badge>
-                    </LS>
-                    </MenuItem>
-                </Right>
-            </Wrapper>
-        </Container>
-    )
+                    </a>
+                </li>
+            </ul>
+        </div>        
+    </nav>)
+    return navbar
 }
 
 export default Navbar;

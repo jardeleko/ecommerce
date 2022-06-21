@@ -131,11 +131,6 @@ const Product = () => {
     const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.user.currentUser);
     const history = useNavigate()
-    const BASE_URL = "http://localhost:3030/api"
-    const localRequest = axios.create({
-        baseURL: BASE_URL,
-        headers: {token: `Bearer ${currentUser.accessTk}`}
-    })
     useEffect(()=> {
         const getProduct = async () => {
         await publicRequest.get("/products/find/"+id).then((res) => {
@@ -156,7 +151,12 @@ const Product = () => {
         }
     }
 
-    const handleClick = async () => { 
+    const handleClick = async () => {
+        const BASE_URL = "http://localhost:3030/api"
+        const localRequest = axios.create({
+            baseURL: BASE_URL,
+            headers: {token: `Bearer ${currentUser.accessTk}`}
+        }) 
         await localRequest.post("/cart", {
             userId: currentUser._id,
             products: {productId:id, quantity:quantity},    
@@ -203,7 +203,7 @@ const Product = () => {
                         <Amount>{quantity}</Amount>
                         <Add cursor="pointer" onClick={()=>handleQuantity("inc")}/>
                     </AmountContainer>
-                    <Button onClick={handleClick}> ADD TO CART </Button>
+                    {currentUser ? <Button onClick={handleClick}> ADD TO CART </Button> : <Button> LOGIN TO ADD CART </Button> }
                 </AddContainer>
             </InfoContainer>
         </Wrapper>

@@ -1,20 +1,29 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useLocation } from "react-router"
-import { Link } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router"
 import styled from "styled-components"
 import axios from "axios"
 import { resetSkill } from "../redux/cartRedux"
+import img from '../assets/success.png'
 
 const Container = styled.div`
+  width:100%;
   height: 100vh;
+  background: linear-gradient(90deg, #b6e3c1, #777777);    
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: 20px;
 `
+const Image = styled.img`
+  width:50%;
+  height: 50vh;
+  align-items: center;
+  justify-content: center;
+`
 const Button = styled.button`
+  cursor:pointer;
   padding: 20px;
   margin-top: 20px;
   border: 1px solid gray;
@@ -23,15 +32,21 @@ const Button = styled.button`
   color:#fff;
 `
 const Success = () => {
-  const location = useLocation();
+  const location = useLocation()
   const dispatch = useDispatch()
+  const history = useNavigate()
   //in Cart.jsx I sent data and cart. Please check that page for the changes.(in video it's only data)
   const data = location.state.data;
   const cart = useSelector((state) => state.cart);
   const currentUser = useSelector((state) => state.user.currentUser);
-  console.log(currentUser.accessTk)
-  const [orderId, setOrderId] = useState(null);
-
+  const [orderId, setOrderId] = useState('');
+  const returnReset = () => {
+    dispatch(resetSkill(), history('/'))
+  }
+  const action = setTimeout(() => {
+    dispatch(resetSkill())
+    history('/') 
+ }, 3500);
 
   useEffect(()  => {
     const BASE_URL = "http://localhost:3030/api"
@@ -39,11 +54,13 @@ const Success = () => {
         baseURL: BASE_URL,
         headers: {token: `Bearer ${currentUser.accessTk}`}
     })
-    const createOrder = async () => {
-      await localRequest.post("/orders", 
-        {
-          userId: currentUser._id,
-          products: cart.products.map((item) => ({
+    if(cart.total !== 0){
+      async function createOrder() {
+        await localRequest.post("/orders", 
+          {
+            userId: currentUser._id,
+            products: cart.products.map((item) => ({
+            productName: item.title,
             productId: item._id,
             quantity: item.quantity,
           })),
@@ -51,22 +68,27 @@ const Success = () => {
           address: data.billing_details.address,
         }).then((res) => {
           setOrderId(res.data._id);
-          dispatch(resetSkill())
         }).catch((err) => {
-          console.log("error order"+err);
+            console.log("error order"+err);
         })
-    };
-    data && createOrder();
-  }, [cart, data, currentUser, dispatch]);
+      }
+      createOrder()
+    }else {
+      console.log('Problem within order, payment != minimum')
+    }
+  }, [cart, data, currentUser]);
+
+
 
   return (
-    <Container>
-      {orderId
-        ? `Order has been created successfully. Your order number is ${orderId}`
-        : `Successfull. Your order is being prepared...`}
-      <Link  to={`/`}>
-        <Button>Go to Homepage</Button>
-      </Link>  
+    <Container >
+      <Image src={img}/>
+        <span>{orderId && action
+          ? `Order has been created successfully. Your order number is ${orderId}`
+          : `Successfull. Your order is being prepared...`}
+        </span>
+        <Button onClick={returnReset}>Go to Homepage</Button>
+          
     </Container>
   );
 };

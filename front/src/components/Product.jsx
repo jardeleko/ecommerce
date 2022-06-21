@@ -4,7 +4,7 @@ import {mobile} from '../responsive'
 import {Link} from 'react-router-dom'
 
 const LS = styled(Link)`
-  color:white;
+  color:white !important;
 `;
 
 const Info = styled.div`

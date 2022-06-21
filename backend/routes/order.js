@@ -8,7 +8,7 @@ const {verifyToken, verifyTokenAuth, verifyTokenAdmin} = require('./verifyToken'
 
 //GET USER ORDERS OK
 router.get("/find/:userId", verifyTokenAuth, async (req, res) => {
-    await (await Order.find({userId: req.params.userId})).then((orders) => {
+    await Order.find({userId: req.params.userId}).then((orders) => {
         res.status(200).json(orders)
     }).catch((error) => {
         console.log(error)
@@ -54,20 +54,16 @@ router.get("/income", verifyTokenAdmin, async (req, res) => {
 //CREATE ORDER OK
 router.post("/", verifyToken, async (req, res) => {
     const newOrder = new Order(req.body)
-    await User.find({_id : req.body.userId}).then(async (client) => {
-        if (client.length === 0) {
-            res.status(500).json("User not exists on DB!")
-        }
-        else {
-            await newOrder.save().then((savedOrder) => {
-                res.status(200).json(savedOrder)
-            }).catch((err) => {
-                res.status(500).json(err) 
-            })
-        }
-    }).catch((err) => {
-        res.status(500).json(err)
-    })
+    if(req.body.products !== []){
+        await newOrder.save().then((savedOrder) => {
+            res.status(200).json(savedOrder)
+        }).catch((err) => {
+            res.status(500).json(err) 
+        })
+    }
+    else {
+        console.log('invalid transaction!')
+    }
 })
 
 //UPDATE ORDER OK

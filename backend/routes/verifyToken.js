@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken')
+const { findById } = require('../models/User')
+const User = require('../models/User')
 
 const verifyToken = (req, res, next) => {
     const authHeader = req.headers.token
@@ -18,14 +20,17 @@ const verifyToken = (req, res, next) => {
         return res.status(401).json("You are not authenticated!")
     }
 }
-const verifyTokenAuth = (req, res, next) => {
-    verifyToken(req, res, ()=> {
-        if(req.user.id === req.params.id || req.user.isAdmin){
+const verifyTokenAuth = async (req, res, next) => {
+    const currentUser = await User.findById(req.params.id)
+    const aux = currentUser ? currentUser._id : req.user;
+    console.log(aux + 'e req' + req.user)
+    if(req.params.id == aux){
+        verifyToken(req, res, ()=> {
             next()
-        }else {
-            res.status(403).json("You are not alowed to do that!")
-        }
-    })
+        })
+    }else {
+        return res.status(403).json("You not allowed to that!")
+    }
 }
 
 const verifyTokenAdmin = (req, res, next) => {

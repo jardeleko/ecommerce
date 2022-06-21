@@ -1,0 +1,35 @@
+.userList{
+    flex: 4;
+    margin-top: 10px;
+}
+.userListUser{
+    display: flex;
+    align-items: center;
+
+}
+.userListAvatar{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+.userListButton{
+    border: none;
+    width: 80px;
+    height: 35px;
+    text-align: center;
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin-right: 50px;
+    background: linear-gradient(-180deg, #055069, #019196);
+    color: white;
+    cursor: pointer;
+}
+.userListButton:hover{
+    opacity: 0.8;
+}
+.userListDelete{
+    color: red;
+    cursor: pointer;
+}

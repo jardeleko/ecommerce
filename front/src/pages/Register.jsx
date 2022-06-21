@@ -64,12 +64,13 @@ const Agreement = styled.span`
 // cadetblue || cornflowerblue
 
 const Link = styled.a`
-    color:crimson;
+    color:crimson !important;
     text-decoration:none;
     font-weight:bold;
 
      &:hover{        
-        color:#54a85c;
+        color:#54a85c !important;
+        text-decoration: none;
     }
 `
 

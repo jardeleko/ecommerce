@@ -2,7 +2,6 @@ import {React, useState, useEffect} from 'react'
 import styled from 'styled-components'
 import Product from './Product'
 import axios from 'axios'
-// import popularProducts from '../itemsProducts'
 
 const Container = styled.div`
     padding:20px;
