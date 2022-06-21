@@ -108,7 +108,7 @@ const Footer = () => {
         </Center>
         <Right>
            <Title>Contáctame</Title>
-           <ContactItem><Room style={{marginRight:"10px", color:"gray"}}/>Sete de Setembro 656, Santa Maria, RS-Brasil.</ContactItem>
+           <ContactItem><Room style={{marginRight:"10px", color:"gray"}}/>Sete de Setembro, Santa Maria, RS-Brasil.</ContactItem>
            <ContactItem><WhatsApp style={{marginRight:"10px", color:"#25D366"}}/>+55 (49) 988331283 </ContactItem>
            <ContactItem><MailOutline style={{marginRight:"10px", color:"#EA4335"}}/>jardelduarte594@gmail.com</ContactItem>
            <Payment src="https://www.nicepng.com/png/full/83-836237_credit-cards-logo-png-png-free-download-metodos.png"/>

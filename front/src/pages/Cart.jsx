@@ -257,7 +257,7 @@ const Cart = () => {
                         <SummaryItemText>$ {cart.total} </SummaryItemText>
                     </SummaryItem>
                     <StripeCheckout
-                        name="San Flame"
+                        name="Santa Colina"
                         image="https://images.vexels.com/media/users/3/200093/isolated/preview/596f0d8cb733b17268752d044976f102-icone-de-sacola-de-compras.png"
                         billingAddress
                         shippingAddress
