@@ -1,65 +1,86 @@
 import './productsList.css'
 import { DataGrid } from '@material-ui/data-grid'
 import { DeleteOutline } from '@material-ui/icons'
-import { productsRows } from '../../dummyData'
 import {Link} from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect } from 'react'
+import { useDispatch, useSelector} from 'react-redux'
+import Sidebar from "../../components/sidebar/Sidebar"
+import Topbar from "../../components/topbar/Topbar"
+import "../../app.css"
+import { deleteProduct, getProducts } from '../../redux/apiCalls'
+
 
 const ProductList = () => {
-  const [data, setData] = useState(productsRows)
-  
+  const products = useSelector((state) => state.product.list)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    getProducts(dispatch)
+  }, [])
   function handleDelete(id)  {
-      setData(data.filter((item) => item.id !== id))
+    deleteProduct(id, dispatch)
   }
   const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'name', headerName: 'Product', width: 250, renderCell: (params)=>{
-        return (
+    { field: '_id', 
+        headerName: 'ID', 
+        width: 222 
+    },
+    { field: 'name', 
+        headerName: 'Product Name', 
+        width: 450, 
+        renderCell: (params)=>{ return (
             <div className="productsListItem">
                 <img className="productsListAvatar" src={params.row.img} alt="" />
-                {params.row.name}
+                {params.row.title}
             </div>
-        )
-    } },
-    { field: 'stock', headerName: 'Stock', width: 250 },
-    {
-    field: 'status',
-    headerName: 'Status',
-    width: 160,
+            )
+        } 
+    },
+    {   
+        field: 'inStock', 
+        headerName: 'Stock', 
+        width: 150 
     },
     {
-    field: 'price',
-    headerName: 'Price',
-    width: 190,
+        field: 'price',
+        headerName: 'Price',
+        width: 150,
     },
     {
-    field: 'action',
-    headerName: 'Action',
-    width: 150, renderCell: (params) => {
-        return (
-        <>
-            <Link to={'/products/'+params.row.id}>
+        field: 'action',
+        headerName: 'Action',
+        width: 150, 
+        renderCell: (params) => { return ( <>
+            <Link to={'/products/'+params.row._id}>
                 <button className='productsListButton'>Edit</button>
-            </Link>
-        </>
-        )
-    }
+            </Link></>
+        )}
     },
     {
         field: 'delete',
         headerName: 'Delete',
-        width: 150, renderCell: (params) => {
-        return (
-        <>
-            <DeleteOutline className='productsListDelete' onClick={() => handleDelete(params.row.id)}/>
-        </>)
-        }
+        width: 150, 
+        renderCell: (params) => {return (<>
+            <DeleteOutline className='productsListDelete' onClick={() => handleDelete(params.row._id)}/></>
+        )}
     }
 ];
 
   return (
-    <div className='productsList'>
-      <DataGrid rows={productsRows} disableSelectionOnClick columns={columns} pageSize={10} checkboxSelection />
+    <div className="App"> 
+        <Topbar />
+        <div className="container">
+            <Sidebar />
+            <div className='productsList'>
+            <DataGrid 
+                rows={products} 
+                disableSelectionOnClick 
+                columns={columns} 
+                getRowId={(row) => row._id}
+                pageSize={10} 
+                checkboxSelection 
+            />
+            </div>
+        </div>
     </div>
   )
 }

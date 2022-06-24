@@ -3,7 +3,7 @@ import './topbar.css'
 import { Language, NotificationsNone, Settings } from '@material-ui/icons'
 
 function Topbar() {
-  return (
+    return (
     <div className='topbar'>
         <div className='topbarWrapper'>
             <div className='topLeft'>

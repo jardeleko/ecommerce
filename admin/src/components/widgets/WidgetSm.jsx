@@ -1,59 +1,42 @@
 import { Visibility } from '@material-ui/icons'
+import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import axios from 'axios'
 import './widgetSm.css'
 
 const WidgetSm = () => {
+  const currentUser = useSelector((state) => state.user.currentUser)
+  const [users, setUsers] = useState([])
+  useEffect(() => {
+    const BASE_URL = "http://localhost:3030/api"
+    const localRequest = axios.create({
+        baseURL: BASE_URL,
+        headers: {token: `Bearer ${currentUser.accessTk}`}
+    })
+    const getUsers = async () => {
+      await localRequest.get('/users/?new=true').then((res) => {
+        setUsers(res.data)
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+    getUsers()
+  },[])
+
   return (
     <div className='widgetSm'>
       <span className="widgetSmTitle"> New Join Members</span>
-      <ul className="widgetSmList">
-        <li className="widgetSmListItem">
-          <img src="https://s2.glbimg.com/vRZWLH1mSS8IoA6IU-U-EESGbew=/620x466/e.glbimg.com/og/ed/f/original/2022/02/16/image.png" alt="" className="widgetSmImg" />
-          <div className="widgetSmUser">
-            <span className="widgetSmUsername">Jade Piton </span>
-            <span className="widgetSmUserTitle">Software Engineer</span>
-          </div>
-          <button className="widgetSmButton"><Visibility className='widgetSmIcon'/> Display</button>
-        </li>
-        <li className="widgetSmListItem">
-          <img src="https://s2.glbimg.com/vRZWLH1mSS8IoA6IU-U-EESGbew=/620x466/e.glbimg.com/og/ed/f/original/2022/02/16/image.png" alt="" className="widgetSmImg" />
-          <div className="widgetSmUser">
-            <span className="widgetSmUsername">Jade Piton </span>
-            <span className="widgetSmUserTitle">Software Engineer</span>
-          </div>
-          <button className="widgetSmButton"><Visibility className='widgetSmIcon'/> Display</button>
-        </li>
-        <li className="widgetSmListItem">
-          <img src="https://s2.glbimg.com/vRZWLH1mSS8IoA6IU-U-EESGbew=/620x466/e.glbimg.com/og/ed/f/original/2022/02/16/image.png" alt="" className="widgetSmImg" />
-          <div className="widgetSmUser">
-            <span className="widgetSmUsername">Jade Piton </span>
-            <span className="widgetSmUserTitle">Software Engineer</span>
-          </div>
-          <button className="widgetSmButton"><Visibility className='widgetSmIcon'/> Display</button>
-        </li>
-        <li className="widgetSmListItem">
-          <img src="https://s2.glbimg.com/vRZWLH1mSS8IoA6IU-U-EESGbew=/620x466/e.glbimg.com/og/ed/f/original/2022/02/16/image.png" alt="" className="widgetSmImg" />
-          <div className="widgetSmUser">
-            <span className="widgetSmUsername">Jade Piton </span>
-            <span className="widgetSmUserTitle">Software Engineer</span>
-          </div>
-          <button className="widgetSmButton"><Visibility className='widgetSmIcon'/> Display</button>
-        </li>
-        <li className="widgetSmListItem">
-          <img src="https://s2.glbimg.com/vRZWLH1mSS8IoA6IU-U-EESGbew=/620x466/e.glbimg.com/og/ed/f/original/2022/02/16/image.png" alt="" className="widgetSmImg" />
-          <div className="widgetSmUser">
-            <span className="widgetSmUsername">Jade Piton </span>
-            <span className="widgetSmUserTitle">Software Engineer</span>
-          </div>
-          <button className="widgetSmButton"><Visibility className='widgetSmIcon'/> Display</button>
-        </li>
-        <li className="widgetSmListItem">
-          <img src="https://s2.glbimg.com/vRZWLH1mSS8IoA6IU-U-EESGbew=/620x466/e.glbimg.com/og/ed/f/original/2022/02/16/image.png" alt="" className="widgetSmImg" />
-          <div className="widgetSmUser">
-            <span className="widgetSmUsername">Jade Piton </span>
-            <span className="widgetSmUserTitle">Software Engineer</span>
-          </div>
-          <button className="widgetSmButton"><Visibility className='widgetSmIcon'/> Display</button>
-        </li>
+        <ul className="widgetSmList">
+          {users.map((user) => (
+            <li className="widgetSmListItem" key={user._id}>
+              <img src={user.img || "https://www.ecp.org.br/wp-content/uploads/2017/12/default-avatar.png"} className="widgetSmImg" />
+              <div className="widgetSmUser">
+                <span className="widgetSmUsername">{user.name} </span>
+                <span className="widgetSmUserTitle">{user.email}</span>
+              </div>
+            <button className="widgetSmButton"><Visibility className='widgetSmIcon'/> Display</button>
+          </li>
+        ))}
       </ul>
     </div>
   )

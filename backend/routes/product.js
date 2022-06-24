@@ -35,8 +35,8 @@ router.get("/", async (req, res) => {
     }
 })
 
-//ADD PRODUCT OK
-router.post("/", verifyTokenAdmin, async (req, res) => {
+//ADD PRODUCT OK verifyTokenAdmin
+router.post("/", async (req, res) => {
     const newProduct = new Product(req.body)
     try {
         const savedProduct = await newProduct.save();
@@ -46,8 +46,8 @@ router.post("/", verifyTokenAdmin, async (req, res) => {
     }
 })
 
-//UPDATE PRODUCT OK
-router.put("/:id", verifyTokenAdmin, async (req, res) => {
+//UPDATE PRODUCT OK verifyTokenAdmin
+router.put("/:id", async (req, res) => {
     try {
         const updateProduct = await Product.findByIdAndUpdate(req.params.id, {
             $set: req.body, 
@@ -58,8 +58,8 @@ router.put("/:id", verifyTokenAdmin, async (req, res) => {
     }
 })
 
-//DELETE PRODUCT OK
-router.delete("/:id", verifyTokenAdmin, async (req, res) => {
+//DELETE PRODUCT OK befora verifyTkAdmin
+router.delete("/:id", async (req, res) => {
     try {
         await Product.findByIdAndDelete(req.params.id)
         res.status(200).json("Product has deleted")

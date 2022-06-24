@@ -20,7 +20,7 @@
   }
   .navbar{
     /* background: #65857e; */
-    background: linear-gradient(-180deg, #055069, #019196);
+    background-image: linear-gradient(to right, #02AAB0 0%, #00CDAC  51%, #02AAB0  100%);
   }
   .nav-item::after {
     content: '';
@@ -42,7 +42,7 @@
       color: #000000
   }
   .dropdown-menu{
-    background: linear-gradient(-180deg, #055069, #019196);
+    background-image: linear-gradient(to right, #02AAB0 0%, #00CDAC  51%, #02AAB0  100%);
   }
   .dropdown-item{
     text-decoration: none;

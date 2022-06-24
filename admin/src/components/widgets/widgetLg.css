@@ -45,15 +45,15 @@
     border: none;
     border-radius: 10px;
 }
-.widgetLgButton.Approved{
+.widgetLgButton.approved{
     background-color: rgb(179, 223, 179);
     color:black;
 }
-.widgetLgButton.Declined{
+.widgetLgButton.declined{
     background-color: rgb(253, 227, 227);
     color:darkgray;
 }
-.widgetLgButton.Pending{
+.widgetLgButton.pending{
     background-color: rgb(250, 232, 150);
     color: darkgray;
 }

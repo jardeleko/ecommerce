@@ -1,38 +1,89 @@
 import { ArrowDownward, ArrowUpward } from '@material-ui/icons'
+import { useState,useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import axios from 'axios'
 import './feature.css'
 
 const Feature = () => {
+    const currentUser = useSelector((state) => state.user.currentUser)
+    const [actual, setActual] = useState(0)
+    const [prv, setPrev] = useState(0)
+    const [perc, setPerc] = useState(0)
+    const [mean, setMean] = useState(0)
+    const [perc2, setPerc2] = useState(0)
+    console.log(actual)
+    useEffect(() => {
+        const BASE_URL = "http://localhost:3030/api"
+        const localRequest = axios.create({
+            baseURL: BASE_URL,
+            headers: {token: `Bearer ${currentUser.accessTk}`}
+        })
+  
+        const getIncome = async () => {
+            await localRequest.get('/orders/income').then((res) => {
+                let d = new Date()
+                let n1 = d.getMonth()+1
+                let n2 = n1-1
+                let n3 = n2-1
+                const actual = res.data.filter((item) => item._id == n1)
+                const prev = res.data.filter((item) => item._id == n2)
+                const prev2 = res.data.filter((item) => item._id == n3)
+                let r1 = []
+                let r2 = []
+                let r3 = []
+                let r4 = []
+                r1.push(actual.map((value) => value.total))
+                setActual(r1)
+                r2.push(prev.map((value) => value.total))
+                setPrev(r2)
+                r3.push(prev2.map((value) => value.total))
+                setPerc(r1[0]*100/r2[0]-100)
+                setPerc2(r2[0]*100/r3[0]-100)
+                r4 = ((r1[0]/3)+(r2[0]/3)+(r3[0]/3))
+                setMean(r4)
+            }).catch((error) => {
+                console.log(error)
+            })
+        }
+        getIncome()
+    }, [])
+    
   return (
     <div className='featured'>
         <div className="featuredItem">
-            <span className="featuredTitle">Revanue</span>
+            <span className="featuredTitle" id="sales">Sales</span>
             <div className="featuredMoneyContainer">
-                <span className="featuredMoney">$2,415</span>
+                <span className="featuredMoney">${(actual)}</span>
                 <span className="featuredMoneyRate">
-                    -11,4 <ArrowDownward className='featuredIcon negative'/>
+                    {(perc).toFixed(2)}% {" "} {perc < 0 ? (
+                        <ArrowDownward className='featuredIcon negative'/>
+                      ) : ( <ArrowUpward className='featuredIcon'/>
+                    )} 
                 </span>
             </div>
             <span className="featuredSub">Compared to last month</span>
         </div>
         <div className="featuredItem">
-            <span className="featuredTitle">Sales</span>
+            <span className="featuredTitle">Last Month</span>
             <div className="featuredMoneyContainer">
-                <span className="featuredMoney">$5,415</span>
+                <span className="featuredMoney">$
+                {prv}
+                </span>
                 <span className="featuredMoneyRate">
-                    -1,4 <ArrowDownward className='featuredIcon negative'/>
+                    {(perc2).toFixed(2)}% {" "} {perc2 < 0 ? (
+                        <ArrowDownward className='featuredIcon negative'/>
+                      ) : ( <ArrowUpward className='featuredIcon'/>
+                    )}
                 </span>
             </div>
-            <span className="featuredSub">Compared to last month</span>
+            <span className="featuredSub">Compared to other</span>
         </div>
         <div className="featuredItem">
-            <span className="featuredTitle">Cost</span>
+            <span className="featuredTitle">Mean Sales</span>
             <div className="featuredMoneyContainer">
-                <span className="featuredMoney">$2,225</span>
-                <span className="featuredMoneyRate">
-                    +2,4 <ArrowUpward className='featuredIcon'/>
-                </span>
+                <span className="featuredMoney">${(mean).toFixed(2)}</span>
             </div>
-            <span className="featuredSub">Compared to last month</span>
+            <span className="featuredSub">Based to last 3 month</span>
         </div>
     </div>
   )
