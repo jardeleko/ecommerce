@@ -48,14 +48,11 @@ router.post("/", async (req, res) => {
 
 //UPDATE PRODUCT OK verifyTokenAdmin
 router.put("/:id", async (req, res) => {
-    try {
-        const updateProduct = await Product.findByIdAndUpdate(req.params.id, {
-            $set: req.body, 
-        }, {new:true})
+    await Product.findByIdAndUpdate(req.params.id, { $set: req.body }, {new:true}).then((updateProduct) => {
         res.status(200).json(updateProduct)
-    }catch(err){
-        res.status(500).json(err)
-    }
+    }).catch((err) => {
+        res.status(500).json(err)    
+    })
 })
 
 //DELETE PRODUCT OK befora verifyTkAdmin

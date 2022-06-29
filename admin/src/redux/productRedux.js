@@ -43,20 +43,7 @@ const productSlice = createSlice({
       },
       updateProductSuccess:(state, action) => {
         state.isFetching = false
-        state.list[state.list.findIndex((item) => item._id === action.payload.id)] = action.payload.user
-      },
-      updateProductFailure:(state) => {
-        state.isFetching = false
-        state.error = true
-      },
-            //UPDATE METHODS
-      updateProductStart:(state) => {
-        state.isFetching = true
-        state.error = false
-      },
-      updateProductSuccess:(state, action) => {
-        state.isFetching = false
-        state.list[state.list.findIndex((item) => item._id === action.payload.id)] = action.payload.product
+        state.list.produc[state.list.findIndex((item) => item._id === action.payload.id)] = action.payload
       },
       updateProductFailure:(state) => {
         state.isFetching = false
@@ -67,7 +54,7 @@ const productSlice = createSlice({
         state.isFetching = true
         state.error = false
       },
-      addProductSuccess:(state, action) => {
+      addProductSuccess:(state, action) => {  
         state.isFetching = false
         state.list.push(action.payload)
       },

@@ -49,8 +49,7 @@ export const deleteProduct = async (id, dispatch) => {
 
 export const updateProduct = async (id, product, dispatch) => {
     dispatch(updateProductStart())
-    await publicRequest.put(`/products/${id}`).then((res) => {    
-        console.log(res.data)    
+    await publicRequest.put(`/products/${id}`, product).then((res) => {    
         dispatch(updateProductSuccess({id, product}))       
     }).catch(() => {
         dispatch(updateProductFailure())

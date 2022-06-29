@@ -126,3 +126,6 @@
 .productAddButton:hover{
     opacity: 0.8;
 }
+.publishImg{
+    cursor: pointer;
+}

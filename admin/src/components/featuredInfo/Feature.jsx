@@ -11,7 +11,7 @@ const Feature = () => {
     const [perc, setPerc] = useState(0)
     const [mean, setMean] = useState(0)
     const [perc2, setPerc2] = useState(0)
-    console.log(actual)
+
     useEffect(() => {
         const BASE_URL = "http://localhost:3030/api"
         const localRequest = axios.create({

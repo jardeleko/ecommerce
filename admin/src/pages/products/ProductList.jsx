@@ -16,7 +16,7 @@ const ProductList = () => {
   useEffect(() => {
     getProducts(dispatch)
   }, [])
-  function handleDelete(id)  {
+  function handleDelete(id) {
     deleteProduct(id, dispatch)
   }
   const columns = [

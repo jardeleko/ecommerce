@@ -14,6 +14,7 @@ const Home = () => {
   const currentUser = useSelector((state) => state.user.currentUser)
   const [userStats, setUserStats] = useState([])
   const months = useMemo(() => ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Agu", "Sep", "Oct", "Nov", "Dec"],[])
+
   useEffect(() => {
     const BASE_URL = "http://localhost:3030/api"
     const localRequest = axios.create({
@@ -22,7 +23,8 @@ const Home = () => {
     })
     const getStats = async () => {
       await localRequest.get('/users/stats').then((res) => {
-        res.data.map((item) => {
+        const sortedReturn = res.data.sort(function(a, b){return a._id - b._id});
+        sortedReturn.map((item) => {
           setUserStats(prev =>[
             ...prev,
             {name:months[item._id-1], "Active User": item.total}
@@ -33,7 +35,7 @@ const Home = () => {
       })
     }
     getStats()
-  },[months])
+  },[months, currentUser])
 
   return (
     <div className="App"> 
