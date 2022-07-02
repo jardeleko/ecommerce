@@ -8,6 +8,8 @@ const productRoute = require('./routes/product')
 const cartRoute = require('./routes/cart')
 const orderRoute = require('./routes/order')
 const stripeRoute = require('./routes/stripe')
+const reportRoute = require('./routes/reports')
+const likesRoute = require('./routes/likes')
 const path = require('path')
 const cors = require('cors')
 
@@ -25,12 +27,15 @@ mongoose.connect(process.env.MONGO_URL).then(() =>
 
 app.use(cors())
 app.use(express.json())
-app.use("/api/users",userRoute)
-app.use("/api/auth",authRoute)
-app.use("/api/products",productRoute)
-app.use("/api/cart",cartRoute)
-app.use("/api/orders",orderRoute)
+app.use("/api/users", userRoute)
+app.use("/api/auth", authRoute)
+app.use("/api/products", productRoute)
+app.use("/api/cart", cartRoute)
+app.use("/api/orders", orderRoute)
 app.use("/api/checkout",stripeRoute)
+app.use("/api/reports", reportRoute)
+app.use("/api/likes", likesRoute)
+
 
 
 app.listen(process.env.PORT || 3030, () => {

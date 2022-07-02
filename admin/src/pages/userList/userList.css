@@ -1,7 +1,9 @@
 .userList{
     flex: 4;
-    margin-top: 10px;
+    margin-top: 20px;
+    
 }
+
 .userListUser{
     display: flex;
     align-items: center;

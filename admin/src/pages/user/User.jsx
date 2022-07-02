@@ -118,18 +118,13 @@ const User = () => {
           );
         }
     }
-    return (
-        <div className="App"> 
+    return (<>
             <Topbar />
-            <div className="container">
-                <Sidebar />
+            <div style={{display:'flex'}}>
+            <Sidebar />
+            <div className="container-lg mt-3 " style={{marginTop:'0px'}}>
                 <div className='user'> 
-                    <div className="userTitleContainer">
-                        <h1 className="userTitle">Edit User</h1>
-                        <Link to={'/newUser'}>
-                            <button className="userAddButton">Create</button>
-                        </Link>
-                    </div>
+                    
                     <div className="userContainer">
                         <div className="userShow">
                             <div className="userShowTop">
@@ -270,7 +265,7 @@ const User = () => {
                 </div>
             </div>
         </div>
-    )
+    </> )
 }
 
 export default User

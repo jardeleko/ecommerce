@@ -2,6 +2,7 @@ import { FavoriteBorderOutlined, SearchOutlined, ShoppingCartOutlined } from '@m
 import styled from 'styled-components'
 import {mobile} from '../responsive'
 import {Link} from 'react-router-dom'
+import { useState } from 'react';
 
 const LS = styled(Link)`
   color:white !important;
@@ -51,11 +52,12 @@ const Image = styled.img`
     height:75%;
     z-index:2;
 `
-const Icon = styled.div`
+const Icon = styled.button`
     width:40px;
     height:40px;
     margin:10px;
     border-radius: 50%;
+    border:none;
     background-color:black;
     color:white;
     display:flex;
@@ -77,15 +79,14 @@ const Product = ({item}) => {
       <Image src={item.img}/>
       <Info>
         <Icon>
-          <ShoppingCartOutlined/>
-        </Icon>
-        <Icon>
           <LS to={`/product/${item._id}`}> 
             <SearchOutlined/>
           </LS>
         </Icon>
         <Icon>
+        <LS to={`/exclusive/${item._id}`}> 
           <FavoriteBorderOutlined/>
+        </LS>
         </Icon> 
       </Info>   
     </Container>

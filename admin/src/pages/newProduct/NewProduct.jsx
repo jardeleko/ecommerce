@@ -74,35 +74,64 @@ export default function NewProduct() {
   }
 
   console.log(file)
-  return (
-    <div className="App"> 
-      <Topbar />
-      <div className="container">
+  return (<>
+    <Topbar />
+    <div style={{display:'flex'}}>
         <Sidebar />
+        <div className="container p-3 my-3 ">
         <div className="newProduct">
           <h1 className="addProductTitle">New Product</h1>
-          <form className="addProductForm">
-            <div className="addProductItem">
-              <label>Image</label>
-              <input type="file" id="file" onChange={(e) => setFile(e.target.files[0])} />
+          <form className="form-row">
+            <div className="form-group col-md-6">
+              <label for="formFile" className="form-label">Image</label>
+                <input 
+                  className='form-control'
+                  type="file" 
+                  id="file" 
+                  onChange={(e) => setFile(e.target.files[0])} 
+                  style={{display:''}}
+                />
             </div>
-            <div className="addProductItem">
+            <div className="form-group col-md-6">
               <label>Title</label>
-              <input name="title" type="text" placeholder="Apple Airpods"  onChange={handleChange}/>
+              <input 
+                className='form-control'
+                name="title" 
+                type="text" 
+                placeholder="Apple Airpods"  
+                onChange={handleChange}
+                />
             </div>
-            <div className="addProductItem">
+            <div className="form-group col-md-6">
               <label>Description</label>
-              <input name="desc" type="text" placeholder="Details for product" onChange={handleChange}/>
+              <input 
+                className='form-control'
+                name="desc" 
+                type="text" 
+                placeholder="Details for product" 
+                onChange={handleChange}
+              />
             </div>
-            <div className="addProductItem">
+            <div className="form-group col-md-6">
               <label>Price</label>
-              <input name="price" type="number" placeholder="100" onChange={handleChange}/>
+              <input 
+                className='form-control'
+                name="price" 
+                type="number" 
+                placeholder="100" 
+                onChange={handleChange}
+              />
             </div>
-            <div className="addProductItem">
+            <div className="form-group col-md-6">
               <label>Categories</label>
-              <input type="text" placeholder="jeans, skirts, women, men.." onChange={handleCat}/>
+              <input 
+                className='form-control'
+                type="text" 
+                placeholder="jeans, skirts, women, men.." 
+                onChange={handleCat}
+              />
             </div>
-            <div className="addProductItem">
+            <div className="form-group col-md-6">
               <label>Stock</label>
               <select  name="inStock" id="active" onChange={handleChange}>
                 <option value='true' >Yes</option>
@@ -114,5 +143,5 @@ export default function NewProduct() {
         </div>
       </div>
     </div>
-  );
+  </>);
 }

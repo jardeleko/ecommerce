@@ -1,6 +1,7 @@
 import { Visibility } from '@material-ui/icons'
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import './widgetSm.css'
 
@@ -34,7 +35,7 @@ const WidgetSm = () => {
                 <span className="widgetSmUsername">{user.name} </span>
                 <span className="widgetSmUserTitle">{user.email}</span>
               </div>
-            <button className="widgetSmButton"><Visibility className='widgetSmIcon'/> Display</button>
+              <Link to={`/users/${user._id}`}><button className="widgetSmButton" ><Visibility className='widgetSmIcon'/> Display</button></Link>
           </li>
         ))}
       </ul>

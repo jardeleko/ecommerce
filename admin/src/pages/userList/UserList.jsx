@@ -41,17 +41,17 @@ const UserList = () => {
         { 
             field: '_id', 
             headerName: 'ID', 
-            width: 190 
+            width: 120
         },
         { 
             field: 'name', 
             headerName: 'Name', 
-            width: 200
+            width: 190
         },
         { 
             field: 'username', 
             headerName: 'User', 
-            width: 200, renderCell: (params)=>{
+            width: 150, renderCell: (params)=>{
             return (
                 <div className="userListUser">
                     <img className="userListAvatar" src={params.row.img} alt="user img" />
@@ -62,7 +62,7 @@ const UserList = () => {
         { 
             field: 'email', 
             headerName: 'Email', 
-            width: 250 
+            width: 200 
         },
         {
             field: 'gender',
@@ -75,25 +75,25 @@ const UserList = () => {
             width: 130, renderCell: (params) => {
             return (<>
                 <Link to={'/users/'+params.row._id}>
-                    <button className='userListButton'>Edit</button>
+                    <button className='btn btn-primary' style={{backgroundColor: "rgb(2, 65, 65)", border:'none'}}>Edit</button>
                 </Link>
             </>)}
         },
         {
             field: 'delete',
             headerName: 'Delete',
-            width: 150, renderCell: (params) => {
+            width: 130, renderCell: (params) => {
             return (<>
                 <DeleteOutline className='userListDelete' onClick={() => handleDelete(params.row._id)}/>
             </>)}
         }
     ];
     
-    return (
-        <div className="App"> 
-            <Topbar />
-            <div className="container">
-                <Sidebar />
+    return (<>
+        <Topbar />
+            <div style={{display:'flex'}}>
+            <Sidebar /> 
+            <div className="container ">
                 <div className='userList'>
                     <DataGrid 
                     rows={users} 
@@ -101,12 +101,14 @@ const UserList = () => {
                     columns={columns} 
                     getRowId={(row) => row._id}
                     pageSize={10} 
+                    autoHeight={true}
+                    hideFooter={true}
                     checkboxSelection 
                         />
                 </div>
             </div>
         </div>
-    )
+    </>)
 }
 
 export default UserList

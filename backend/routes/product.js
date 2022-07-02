@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const Product = require('../models/Product')
+const Like = require('../models/Likes')
 const {verifyToken, verifyTokenAuth, verifyTokenAdmin} = require('./verifyToken')
 
 //checked true
@@ -33,6 +34,19 @@ router.get("/", async (req, res) => {
         
         res.status(500).json(error)
     }
+})
+
+//GET ALL PRODUCTS OK
+router.get("/likes/:userId", async (req, res) => {
+    const SET = await Like.find({userId:req.params.userId})
+    const ids = SET.map((item) => {
+        return item.productId
+    })
+    await Product.find({_id:{$in:[...ids],},}).then((products) => {
+        res.status(200).json(products)
+    }).catch((err) => {
+        res.status(500).json(err)
+    })
 })
 
 //ADD PRODUCT OK verifyTokenAdmin

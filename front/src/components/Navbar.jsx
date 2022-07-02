@@ -49,6 +49,7 @@ const Navbar = () => {
                     <div className="dropdown-menu"> 
                     <a className="dropdown-item" href="/profile"> Perfil</a>
                     <a className="dropdown-item" href="/orders"> Orders</a>
+                    <a className="dropdown-item" href="/likes"> Favorite</a>
                     </div>
                 </li>
               </ul>

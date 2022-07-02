@@ -35,13 +35,14 @@
     padding: 20px;
     -webkit-box-shadow: 0px 0px 11px -1px #c5c3c3; 
     box-shadow: 0px 0px 11px -1px #c5c3c3;
+    margin-right: 30px;
+
 }
 .userUpdate{
     flex: 2;
     padding: 20px;
     -webkit-box-shadow: 0px 0px 11px -1px #c5c3c3; 
     box-shadow: 0px 0px 11px -1px #c5c3c3;
-    margin-left: 20px;
 }
 .userShowTop{
     display: flex;
@@ -85,9 +86,6 @@
 .userShowIcon{
     font-size: 16px !important;
 }
-.userUpdate{
-
-}
 
 .userUpdateTitle{
     margin-left: 20px;
@@ -100,9 +98,7 @@
     margin-top: 20px;
     margin-left: 20px;
 }
-.userUpdateLeft{
-    
-}
+
 .userUpdateItem{
     display: flex;
     flex-direction: column;
@@ -147,4 +143,31 @@
 }
 .updateIcon{
     cursor: pointer;
+}
+
+@media(max-width:768px) {
+    .userContainer{
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .userUpdate, .userShow{
+        margin-right: 100px;
+    }
+}
+
+@media(max-width:350px) {
+    .userContainer{
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .userUpdate, .userShow{
+        width: 100%;
+        margin-right: 100px;
+    }
 }

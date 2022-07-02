@@ -1,15 +1,17 @@
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
 import Sidebar from "../../components/sidebar/Sidebar"
+import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useMemo, useState } from 'react'
 import { updateProduct } from "../../redux/apiCalls"
 import Topbar from "../../components/topbar/Topbar"
 import {Link, useLocation} from 'react-router-dom'
 import Chart from '../../components/chart/Chart'
-import { useDispatch, useSelector } from 'react-redux'
+import { Publish } from "@material-ui/icons"
 import app from '../../firebase'
 import axios from 'axios'
 import "../../app.css"
 import './product.css'
+
 
 const Product = () => {
   const location = useLocation()
@@ -105,11 +107,11 @@ const Product = () => {
     getStats();
   }, [id, months]);
 
-  return (
-    <div className="App"> 
-      <Topbar />
-      <div className="container">
-        <Sidebar />
+  return (<>
+    <Topbar />
+    <div style={{display:'flex'}}>
+      <Sidebar />
+      <div className="container-lg mt-3 ">
         <div className='productPage'> 
           <div className="productTittleContainer">
             <h1 className="productTitle">Product</h1>
@@ -120,7 +122,8 @@ const Product = () => {
             <div className="productTopLeft">
               <Chart data={pStats} dataKey="Sales" title='Sales Performance' />
             </div>
-            
+          </div>
+          <div className="productTop">
             <div className="productTopRight">          
               <div className="productInfoTop">
                 <img src={item.img} alt="" className="productInfoImg" />
@@ -172,11 +175,11 @@ const Product = () => {
                 </select>
               </div>
               <div className="productFormRight">
-                <div className="productUpload">
-                  <img src={item.img} alt="" className="productUploadImg" id="file" />
-                  <label for='file'>                   
-                    <input type='file' id='file' style={{}} onChange={(e) => setFile(e.target.files[0])} />
-                  </label>
+                <div className="productUpdateUpload">
+                    <img src={item.img}
+                    alt="update profile" className="productUploadImg" />
+                    <label htmlFor='file'><Publish className='updateIcon' /></label>
+                    <input type="file" id="file" style={{display:"none"}} onChange={(e) => setFile(e.target.files[0])}/>
                 </div>
                 <button className="productButton" onClick={handleSubmit}>Update</button>
               </div>
@@ -185,7 +188,7 @@ const Product = () => {
         </div>
       </div>
     </div>
-  )
+  </>)
 }
 
 export default Product

@@ -4,7 +4,6 @@ const User = require('../models/User')
 
 const verifyToken = (req, res, next) => {
     const authHeader = req.headers.token
-    // console.log(authHeader.split(" ")[1])
     if(authHeader){
         const token = authHeader.split(" ")[1]
         jwt.verify(token, process.env.JWT_SECRET, (err, user) =>{
@@ -23,7 +22,6 @@ const verifyToken = (req, res, next) => {
 const verifyTokenAuth = async (req, res, next) => {
     const currentUser = await User.findById(req.params.id)
     const aux = currentUser ? currentUser._id : req.user;
-    console.log(aux + 'e req' + req.user)
     if(req.params.id == aux){
         verifyToken(req, res, ()=> {
             next()

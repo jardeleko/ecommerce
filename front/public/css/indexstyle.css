@@ -20,7 +20,7 @@
   }
   .navbar{
     /* background: #65857e; */
-    background-image: linear-gradient(to right, #02AAB0 0%, #00CDAC  51%, #02AAB0  100%);
+    background-image: linear-gradient(to right top, #a8bde1, #a69fc0, #9c849b, #8a6d77, #715858);
   }
   .nav-item::after {
     content: '';
@@ -42,8 +42,8 @@
       color: #000000
   }
   .dropdown-menu{
-    background-image: linear-gradient(to right, #02AAB0 0%, #00CDAC  51%, #02AAB0  100%);
-  }
+    background-image: linear-gradient(to top, #a8bde1, #a69fc0, #9c849b, #8a6d77, #715858);
+   }
   .dropdown-item{
     text-decoration: none;
   }

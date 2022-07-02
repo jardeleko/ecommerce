@@ -22,11 +22,11 @@ const ProductList = () => {
   const columns = [
     { field: '_id', 
         headerName: 'ID', 
-        width: 222 
+        width: 200 
     },
     { field: 'name', 
         headerName: 'Product Name', 
-        width: 450, 
+        width: 250, 
         renderCell: (params)=>{ return (
             <div className="productsListItem">
                 <img className="productsListAvatar" src={params.row.img} alt="" />
@@ -51,7 +51,7 @@ const ProductList = () => {
         width: 150, 
         renderCell: (params) => { return ( <>
             <Link to={'/products/'+params.row._id}>
-                <button className='productsListButton'>Edit</button>
+                <button className='btn btn-primary' style={{backgroundColor: "rgb(2, 65, 65)", border:'none'}}>Edit</button>
             </Link></>
         )}
     },
@@ -65,24 +65,24 @@ const ProductList = () => {
     }
 ];
 
-  return (
-    <div className="App"> 
-        <Topbar />
-        <div className="container">
-            <Sidebar />
-            <div className='productsList'>
-            <DataGrid 
-                rows={products} 
-                disableSelectionOnClick 
-                columns={columns} 
-                getRowId={(row) => row._id}
-                pageSize={10} 
-                checkboxSelection 
-            />
-            </div>
+  return (<>
+    <Topbar />
+    <div style={{display:'flex'}}>
+    <Sidebar />
+        <div className="container " style={{marginTop:'30px'}}>
+        <DataGrid 
+            rows={products} 
+            disableSelectionOnClick 
+            columns={columns} 
+            getRowId={(row) => row._id}
+            pageSize={10} 
+            autoHeight={true}
+            hideFooter={true}
+            checkboxSelection 
+        />
         </div>
     </div>
-  )
+    </>)
 }
 
 export default ProductList

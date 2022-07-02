@@ -1,19 +1,17 @@
 import Feature from '../../components/featuredInfo/Feature'
-import WidgetSm from '../../components/widgets/WidgetSm'
-import WidgetLg from '../../components/widgets/WidgetLg'
 import Sidebar from "../../components/sidebar/Sidebar"
+import { useEffect, useState, useMemo } from 'react'
 import Topbar from "../../components/topbar/Topbar"
 import Chart from '../../components/chart/Chart'
-import { useEffect, useState, useMemo } from 'react'
+import { useSelector } from 'react-redux'
+import axios from 'axios'
 import "../../app.css"
 import "./home.css"
-import axios from 'axios'
-import {useSelector} from 'react-redux'
 
 const Home = () => {
-  const currentUser = useSelector((state) => state.user.currentUser)
   const [userStats, setUserStats] = useState([])
   const months = useMemo(() => ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Agu", "Sep", "Oct", "Nov", "Dec"],[])
+  const currentUser = useSelector((state) => state.user.currentUser)
 
   useEffect(() => {
     const BASE_URL = "http://localhost:3030/api"
@@ -34,24 +32,19 @@ const Home = () => {
         console.log(err)
       })
     }
-    getStats()
+    getStats(userStats)
   },[months, currentUser])
-
   return (
-    <div className="App"> 
-      <Topbar />
-      <div className="container">
-        <Sidebar />
-        <div className='home'>
-            <Feature />
-            <Chart data={userStats} title="User Analytics" grid dataKey="Active User"/>
-            <div className="homeWidgets">
-              <WidgetSm />
-              <WidgetLg />
-            </div>
+    <>
+    <Topbar />
+    <div style={{display:'flex'}}>
+    <Sidebar style={{marginTop:'0px'}}/>
+        <div className='container-lg'>
+            <Feature/>
+            <Chart data={userStats} title="User Analytics" grid dataKey="Active User" />
         </div>
-      </div>
     </div>
+    </>
   )
 }
 
