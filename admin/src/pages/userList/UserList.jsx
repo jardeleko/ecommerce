@@ -96,15 +96,14 @@ const UserList = () => {
             <div className="container ">
                 <div className='userList'>
                     <DataGrid 
-                    rows={users} 
-                    disableSelectionOnClick 
-                    columns={columns} 
-                    getRowId={(row) => row._id}
-                    pageSize={10} 
-                    autoHeight={true}
-                    hideFooter={true}
-                    checkboxSelection 
-                        />
+                        rows={users} 
+                        disableSelectionOnClick 
+                        columns={columns} 
+                        getRowId={(row) => row._id}
+                        autoHeight={true}
+                        hideFooter={false}
+                        checkboxSelection 
+                    />
                 </div>
             </div>
         </div>

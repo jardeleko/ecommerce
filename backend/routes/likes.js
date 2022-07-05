@@ -23,6 +23,16 @@ router.get("/find/:idUser", verifyTokenAuth, async (req, res) => {
     })
 
 })
+router.get("/find/total/:userId", verifyTokenAuth, async (req, res) => {
+    await Like.find({userId: req.params.userId}).then((likes) => {
+        var count = likes.length
+        console.log(count)
+        res.status(200).json(count)
+    }).catch((error) => {
+        console.log(error)
+        res.status(500).json(error)
+    }) 
+})
 
 //POST Like true
 router.post("/", verifyToken, async (req, res) => {

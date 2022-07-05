@@ -30,8 +30,12 @@ const orderSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            default: "Pending"
+            default: "pending"
         },
+        feedback: {
+            type: String,
+            default: "temporary"
+        }
     }, 
     {timestamps:true}
 )

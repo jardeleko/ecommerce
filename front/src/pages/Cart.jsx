@@ -38,9 +38,9 @@ const TopButton = styled.a`
     cursor:pointer;
     border: none;
     background-color: transparent;
-    color: black;
+    color: black !important;
     &:hover{
-        text-decoration:underline;
+        text-decoration:underline !important;
     }
 `
 const TopTexts = styled.div`
@@ -48,10 +48,8 @@ const TopTexts = styled.div`
 `
 
 const TopText = styled.span`
-    text-decoration:underline;
     cursor: pointer;
     margin: 0px 10px;
-
 `
 const Bottom = styled.div`
     display: flex;
@@ -156,19 +154,26 @@ const Button = styled.button`
     font-weight:600;
     cursor:pointer;
 `
+const Tag = styled.a`
+    color:#000 !important;
+    text-decoration:underline !important;
+    &:hover{
+        text-decoration:none !important;
+    }
+`
 
 const Cart = () => {
     const cart = useSelector((state) => state.cart)
-    const currentUser = useSelector((state) => state.user.currentUser);
+    const currentUser = useSelector((state) => state.user.currentUser)
     const dispatch = useDispatch()
-    const [stripeToken, setStripeToken] = useState(null);
+    const [stripeToken, setStripeToken] = useState(null)
+    const [total, setSum] = useState(0)
     const history = useNavigate()
     const BASE_URL = "http://localhost:3030/api"
     const localRequest = axios.create({
         baseURL: BASE_URL,
         headers: {token: `Bearer ${currentUser.accessTk}`}
     })
-
     const handleClick = async (product) => { 
         await localRequest.delete(`/cart/${product._idCart}`).then((res) => {
             dispatch(removeProduct({product}))
@@ -184,7 +189,10 @@ const Cart = () => {
         e.preventDefault()
         dispatch(resetSkill())
     }
-    
+    const returnSearch = () => {
+        window.history.go(-2)    
+    }
+
     useEffect(()=> {
         const makeRequest = async () => {
             const localPrice = cart.total * 100;
@@ -195,11 +203,22 @@ const Cart = () => {
                 history("/success", {state:{data:res.data}})  
                 console.log(res.data)  
             }).catch((err) => {
-                console.log(err);
+                history("/failed", {state:{data:err.response.data}})  
             })
         }
         stripeToken && makeRequest();
     }, [stripeToken, cart.total, history])
+
+    useEffect(() => {
+        const getTotal = async () => {
+            await localRequest(`/likes/find/total/${currentUser._id}`).then((res) => {
+                setSum(res.data)
+            }).catch((err) => {
+                console.log(err)
+            })
+        } 
+        getTotal()
+    },[currentUser])
     
     return (
         <Container>
@@ -208,10 +227,10 @@ const Cart = () => {
             <Wrapper>
             <Title>YOUR BAG</Title>
                 <Top> 
-                <TopButton href='/'>CONTINUE SHOPPING</TopButton>
+                <TopButton onClick={returnSearch}>CONTINUE SHOPPING</TopButton>
                 <TopTexts>
-                    <TopText>Shopping Bag ({cart.quantity})</TopText>
-                    <TopText>Your Wishlist (0)</TopText>
+                    <Tag href='#'><TopText>Shopping Bag ({cart.quantity})</TopText></Tag>
+                    <Tag href='/likes'><TopText>Your Wishlist ({total})</TopText></Tag>
                 </TopTexts>
                 <TopButton type="filled" onClick={handleReset}>CLEAN CART</TopButton>
                 </Top>

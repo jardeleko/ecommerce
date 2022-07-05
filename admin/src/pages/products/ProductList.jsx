@@ -77,7 +77,7 @@ const ProductList = () => {
             getRowId={(row) => row._id}
             pageSize={10} 
             autoHeight={true}
-            hideFooter={true}
+            hideFooter={false}
             checkboxSelection 
         />
         </div>

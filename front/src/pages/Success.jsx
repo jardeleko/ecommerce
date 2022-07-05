@@ -9,7 +9,7 @@ import img from '../assets/success.png'
 const Container = styled.div`
   width:100%;
   height: 100vh;
-  background: linear-gradient(90deg, #b6e3c1, #777777);    
+  background-color: white;    
   display: flex;
   flex-direction: column;
   align-items: center;

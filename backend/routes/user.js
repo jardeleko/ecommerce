@@ -6,7 +6,7 @@ const {verifyToken, verifyTokenAuth, verifyTokenAdmin} = require('./verifyToken'
 //checked true OK
 
 //Get One User 
-router.get("/find/:id", verifyTokenAdmin, async (req, res) => {
+router.get("/find/:id", verifyToken, async (req, res) => {
     try {
         const user = await User.findById(req.params.id)
         const {password, ...others} = user._doc

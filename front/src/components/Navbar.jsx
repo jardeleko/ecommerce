@@ -10,8 +10,9 @@ import { useNavigate } from 'react-router'
 const LS = styled(Link)`
     cursor:pointer;
     font-weight:bold;
+    color: #fec400 !important;
     &:hover{        
-        color: #fec400 !important;
+        color:white !important;
         text-decoration:none;
     }
 `
@@ -27,11 +28,11 @@ const Navbar = () => {
         dispatch(logOut())
         history('/login')
     }
-    const miFunc = (name) => {
-        const [fisrt, ...others] = name.split(" ");
-        others.push('.') 
-        return fisrt.toUpperCase()
-    }   
+    // const miFunc = (name) => {
+    //     const [fisrt, ...others] = name.split(" ");
+    //     others.push('.') 
+    //     return fisrt.toUpperCase()
+    // }   
 
     const navbar = ( 
     <nav className="navbar navbar-expand-lg navbar-dark">  
@@ -44,7 +45,7 @@ const Navbar = () => {
             ? <ul className="navbar-nav mr-auto">
                 <li className="nav-item dropdown">
                     <a className="nav-link dropdown-toggle" data-toggle="dropdown" href="/" role="button" aria-haspopup="true" aria-expanded="false">
-                        {miFunc(currentUser.name)}                      
+                        <img src={currentUser.img}  alt="img user" style={{borderRadius:'150px', width:'40px', height:'40px', objectFit:"cover"}}/>                     
                     </a>
                     <div className="dropdown-menu"> 
                     <a className="dropdown-item" href="/profile"> Perfil</a>

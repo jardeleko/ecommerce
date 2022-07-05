@@ -34,16 +34,41 @@
     padding: 5px 7px;
     border: none;
     border-radius: 10px;
+    cursor: none;
 }
 .widgetLgButton.approved{
     background-color: rgb(179, 223, 179);
     color:black;
+    cursor: none;
+
 }
 .widgetLgButton.declined{
     background-color: rgb(253, 227, 227);
     color:darkgray;
+    cursor: none;
 }
 .widgetLgButton.pending{
     background-color: rgb(250, 232, 150);
     color: darkgray;
+    cursor: none;
+}
+
+.btnFeed{
+    background-color: white;
+    border:none;
+}
+.btnFeed:hover{
+    background-color: rgb(192, 253, 131);
+}
+.btnFeed:active{
+    border: none;
+}
+
+.btnFeedbg{
+    background-color: rgb(192, 253, 131);
+    border:none;
+}
+
+.btnFeedbg:active{
+    border: none;
 }

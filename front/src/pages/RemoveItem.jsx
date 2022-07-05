@@ -40,7 +40,6 @@ const RemoveItem = () => {
     window.history.back() 
   }, 500);
    
-
 }
 
 export default RemoveItem
