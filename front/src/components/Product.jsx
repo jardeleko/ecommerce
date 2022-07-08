@@ -1,8 +1,7 @@
-import { FavoriteBorderOutlined, SearchOutlined, ShoppingCartOutlined } from '@material-ui/icons'
+import { FavoriteBorderOutlined, SearchOutlined } from '@material-ui/icons'
 import styled from 'styled-components'
 import {mobile} from '../responsive'
 import {Link} from 'react-router-dom'
-import { useState } from 'react';
 
 const LS = styled(Link)`
   color:white !important;

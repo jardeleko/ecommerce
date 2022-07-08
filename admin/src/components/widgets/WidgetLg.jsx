@@ -1,23 +1,17 @@
 import'./widgetLg.css'
-import { useSelector } from 'react-redux'
 import { useState, useEffect } from 'react'
 import dateFormat from 'dateformat'
-import axios from 'axios'
+import { userRequest } from '../../requestMethods'
 
 const WidgetLg = () => {
     const [message, setMessage] = useState('')
     const [status, setSelect] = useState('')
     const [idOrder, setID] = useState('')    
-    const currentUser = useSelector((state) => state.user.currentUser)
     const [orders, setOrders] = useState([])
-    const BASE_URL = "http://localhost:3030/api"
-    const localRequest = axios.create({
-      baseURL: BASE_URL,
-      headers: {token: `Bearer ${currentUser.accessTk}`}
-    })
+    
     useEffect(() => {  
       const getOrders = async () => {
-        await localRequest.get('/orders').then((res) => {
+        await userRequest.get('/orders').then((res) => {
           setOrders(res.data)
         }).catch((err) => {
           console.log(err)
@@ -34,7 +28,7 @@ const WidgetLg = () => {
         result = {feedback:message, status}
       }
       console.log(result)
-      await localRequest.put(`/orders/${idOrder}`, result).then((res) => {
+      await userRequest.put(`/orders/${idOrder}`, result).then((res) => {
         console.log(res.data)
         window.location.reload(true)
       }).catch((err) => {
@@ -51,7 +45,7 @@ const WidgetLg = () => {
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Contact us</h5>
+                  <h5 class="modal-title" id="exampleModalLabel">Return to client:</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                   </button>
@@ -59,7 +53,7 @@ const WidgetLg = () => {
                 <div class="modal-body">
                   <div class="md-form mb-4 pink-textarea active-pink-textarea-2">
                     <i class="fas fa-angle-double-right prefix"></i>
-                    <label for="form23">Include on message all problems with order request:</label>
+                    <label for="form23">Set new message...</label>
                     <textarea 
                       id="form23" 
                       class="md-textarea form-control" 

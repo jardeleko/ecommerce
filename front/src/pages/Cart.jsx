@@ -9,9 +9,7 @@ import StripeCheckout from 'react-stripe-checkout'
 import { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom"
 import { resetSkill, removeProduct } from '../redux/cartRedux'
-import publicRequest from '../request/publicMethods'
-import axios from 'axios'
-
+import {publicRequest, userRequest} from '../requestMethods'
 
 const KEY = process.env.REACT_APP_STRIPE
 
@@ -169,13 +167,9 @@ const Cart = () => {
     const [stripeToken, setStripeToken] = useState(null)
     const [total, setSum] = useState(0)
     const history = useNavigate()
-    const BASE_URL = "http://localhost:3030/api"
-    const localRequest = axios.create({
-        baseURL: BASE_URL,
-        headers: {token: `Bearer ${currentUser.accessTk}`}
-    })
+    
     const handleClick = async (product) => { 
-        await localRequest.delete(`/cart/${product._idCart}`).then((res) => {
+        await userRequest.delete(`/cart/${product._idCart}`).then((res) => {
             dispatch(removeProduct({product}))
         }).catch((err) => {
             console.log(err)
@@ -211,7 +205,7 @@ const Cart = () => {
 
     useEffect(() => {
         const getTotal = async () => {
-            await localRequest(`/likes/find/total/${currentUser._id}`).then((res) => {
+            await userRequest.get(`/likes/find/total/${currentUser._id}`).then((res) => {
                 setSum(res.data)
             }).catch((err) => {
                 console.log(err)

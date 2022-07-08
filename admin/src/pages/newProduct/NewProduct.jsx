@@ -9,7 +9,6 @@ import app from '../../firebase'
 import "../../app.css"
 import "./news.css"
 
-
 export default function NewProduct() {
   const [inputs, setInputs] = useState({})
   const [file, setFile] = useState(null)
@@ -22,7 +21,7 @@ export default function NewProduct() {
     })
   }
   const handleCat = (e) => {
-    setCat(e.target.value.split(','))
+    setCat(e.target.value.split(', '))
   }
   const handleClick = (e) => {
     e.preventDefault()
@@ -43,6 +42,7 @@ export default function NewProduct() {
             console.log('Upload is running');
             break;
           default:
+            break;
         }
       },
       (error) => {
@@ -61,19 +61,22 @@ export default function NewProduct() {
           case 'storage/unknown':
             // Unknown error occurred, inspect error.serverResponse
             break;
+          default:
+            break;
         }
       },
       () => {
         // Upload completed successfully, now we can get the download URL
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           const product = {...inputs, img:downloadURL, categories:cat }
+          console.log(product)
           addProduct(product, dispatch)
         });
+        // window.location.reload(true)
       }
     );
   }
 
-  console.log(file)
   return (<>
     <Topbar />
     <div style={{display:'flex'}}>

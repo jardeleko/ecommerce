@@ -2,9 +2,9 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router"
 import styled from "styled-components"
-import axios from "axios"
 import { resetSkill } from "../redux/cartRedux"
 import img from '../assets/success.png'
+import { userRequest } from "../requestMethods"
 
 const Container = styled.div`
   width:100%;
@@ -49,14 +49,10 @@ const Success = () => {
  }, 3500);
 
   useEffect(()  => {
-    const BASE_URL = "http://localhost:3030/api"
-    const localRequest = axios.create({
-        baseURL: BASE_URL,
-        headers: {token: `Bearer ${currentUser.accessTk}`}
-    })
+    
     if(cart.total !== 0){
       async function createOrder() {
-        await localRequest.post("/orders", 
+        await userRequest.post("/orders", 
           {
             userId: currentUser._id,
             products: cart.products.map((item) => ({
@@ -77,8 +73,6 @@ const Success = () => {
       console.log('Problem within order, payment != minimum')
     }
   }, [cart, data, currentUser]);
-
-
 
   return (
     <Container >

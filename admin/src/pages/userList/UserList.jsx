@@ -1,25 +1,20 @@
 import Sidebar from "../../components/sidebar/Sidebar"
 import Topbar from "../../components/topbar/Topbar"
+import { userRequest } from "../../requestMethods"
 import { DeleteOutline } from '@material-ui/icons'
 import { DataGrid } from '@material-ui/data-grid'
-import { useSelector } from "react-redux"
 import { Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import axios from 'axios'
 import './userList.css'
 import "../../app.css"
 
+
 const UserList = () => {
-    const currentUser = useSelector((state) => state.user.currentUser)
     const [users, setUsers] = useState([])
-    const BASE_URL = "http://localhost:3030/api"
-    const localRequest = axios.create({
-        baseURL: BASE_URL,
-        headers: {token: `Bearer ${currentUser.accessTk}`}
-    })
+    
     async function handleDelete(id) {
-        await localRequest.delete(`/users/${id}`).then((res) => {
+        await userRequest.delete(`/users/${id}`).then((res) => {
             console.log(res.data)
             window.location.reload(true)        
         }).catch((err) => {
@@ -28,7 +23,7 @@ const UserList = () => {
       }
     useEffect(() => {
        const getUsers = async () =>  {
-            await localRequest.get('/users').then((res) => {
+            await userRequest.get('/users').then((res) => {
                 setUsers(res.data)
             }).catch((err) => {
                 console.log(err)

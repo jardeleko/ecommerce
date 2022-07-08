@@ -1,24 +1,27 @@
-import './productsList.css'
-import { DataGrid } from '@material-ui/data-grid'
+import { deleteProduct, getProducts } from '../../redux/apiCalls'
+import Sidebar from "../../components/sidebar/Sidebar"
+import { useDispatch, useSelector} from 'react-redux'
+import Topbar from "../../components/topbar/Topbar"
 import { DeleteOutline } from '@material-ui/icons'
+import { DataGrid } from '@material-ui/data-grid'
 import {Link} from 'react-router-dom'
 import { useEffect } from 'react'
-import { useDispatch, useSelector} from 'react-redux'
-import Sidebar from "../../components/sidebar/Sidebar"
-import Topbar from "../../components/topbar/Topbar"
+import './productsList.css'
 import "../../app.css"
-import { deleteProduct, getProducts } from '../../redux/apiCalls'
 
 
 const ProductList = () => {
   const products = useSelector((state) => state.product.list)
   const dispatch = useDispatch()
+  
   useEffect(() => {
     getProducts(dispatch)
-  }, [])
+  }, [dispatch])
+  
   function handleDelete(id) {
     deleteProduct(id, dispatch)
   }
+  
   const columns = [
     { field: '_id', 
         headerName: 'ID', 

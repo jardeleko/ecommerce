@@ -9,7 +9,8 @@ import {mobile} from '../responsive'
 import {Link} from 'react-router-dom'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import axios from 'axios'
+import { userRequest } from '../requestMethods'
+
 
 const Wrapper = styled.div`
     padding:20px;
@@ -87,19 +88,11 @@ const Icon = styled.button`
 
 const Fav = () => {
     const [products, setProducts] = useState([])
-    const [removeItem, setRemoveItem] = useState('')
     const currentUser = useSelector((state) => state.user.currentUser)
-    const BASE_URL = "http://localhost:3030/api"
-    const localRequest = axios.create({
-        baseURL: BASE_URL,
-        headers: {token: `Bearer ${currentUser.accessTk}`}
-    }) 
-    console.log(products)
-    console.log(removeItem)
 
     useEffect(()=> {
         const getProducts = async () => {
-            await localRequest.get(`/products/likes/${currentUser._id}`).then((res) => {
+            await userRequest.get(`/products/likes/${currentUser._id}`).then((res) => {
                 setProducts(res.data)
             }).catch((err) => {
                 console.log(err)

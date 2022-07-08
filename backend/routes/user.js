@@ -48,7 +48,10 @@ router.get("/stats", verifyTokenAdmin, async (req, res) => {
                 },
             }
         ])
-        res.status(200).json(data)
+        const sortedReturn = data.sort((a, b) => {    
+            return a._id - b._id
+        });
+        res.status(200).json(sortedReturn)
     } catch (error) {
         console.log(error)
         res.status(500).json(error)

@@ -1,11 +1,9 @@
 import { ArrowDownward, ArrowUpward } from '@material-ui/icons'
+import { userRequest } from '../../requestMethods'
 import { useState,useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import axios from 'axios'
 import './feature.css'
 
 const Feature = () => {
-    const currentUser = useSelector((state) => state.user.currentUser)
     const [actual, setActual] = useState(0)
     const [prv, setPrev] = useState(0)
     const [perc, setPerc] = useState(0)
@@ -13,21 +11,15 @@ const Feature = () => {
     const [perc2, setPerc2] = useState(0)
 
     useEffect(() => {
-        const BASE_URL = "http://localhost:3030/api"
-        const localRequest = axios.create({
-            baseURL: BASE_URL,
-            headers: {token: `Bearer ${currentUser.accessTk}`}
-        })
-  
         const getIncome = async () => {
-            await localRequest.get('/orders/income').then((res) => {
+            await userRequest.get('/orders/income').then((res) => {
                 let d = new Date()
                 let n1 = d.getMonth()+1
                 let n2 = n1-1
                 let n3 = n2-1
-                const actual = res.data.filter((item) => item._id == n1)
-                const prev = res.data.filter((item) => item._id == n2)
-                const prev2 = res.data.filter((item) => item._id == n3)
+                const actual = res.data.filter((item) => parseInt(item._id) === parseInt(n1))
+                const prev = res.data.filter((item) => parseInt(item._id) === parseInt(n2))
+                const prev2 = res.data.filter((item) => parseInt(item._id) === parseInt(n3))
                 let r1 = []
                 let r2 = []
                 let r3 = []

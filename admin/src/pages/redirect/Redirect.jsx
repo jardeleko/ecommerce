@@ -1,9 +1,8 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
 import { logOut } from '../../redux/userRedux'
 import { useNavigate } from 'react-router-dom'
-
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
+import React from 'react'
 
 const Container = styled.div`
     text-align: center;

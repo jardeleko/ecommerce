@@ -4,19 +4,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useMemo, useState } from 'react'
 import { updateProduct } from "../../redux/apiCalls"
 import Topbar from "../../components/topbar/Topbar"
+import { userRequest } from "../../requestMethods"
 import {Link, useLocation} from 'react-router-dom'
 import Chart from '../../components/chart/Chart'
 import { Publish } from "@material-ui/icons"
 import app from '../../firebase'
-import axios from 'axios'
 import "../../app.css"
 import './product.css'
+
 
 
 const Product = () => {
   const location = useLocation()
   const id = location.pathname.split("/")[2]
-  const currentUser = useSelector((state) => state.user.currentUser)
   const [pStats, setStats] = useState([])
   const [file, setFile] = useState(null)
   const [inputs, setInputs] = useState({})
@@ -70,6 +70,8 @@ const Product = () => {
             case 'storage/unknown':
               // Unknown error occurred, inspect error.serverResponse
               break;
+            default:
+              break;
           }
         },
         () => {
@@ -84,13 +86,8 @@ const Product = () => {
   }
   
   useEffect(() => {
-    const BASE_URL = "http://localhost:3030/api"
-    const localRequest = axios.create({
-        baseURL: BASE_URL,
-        headers: {token: `Bearer ${currentUser.accessTk}`}
-    })
     const getStats = async () => {
-      await localRequest.get("orders/income/sales?pid=" + id).then((res) => {
+      await userRequest.get("orders/income/sales?pid=" + id).then((res) => {
         const sortReturn = res.data.sort((a,b) => {
           return a._id - b._id
         })
@@ -99,6 +96,7 @@ const Product = () => {
             ...prev,
             {name:months[item._id-1], "Sales": item.total}
           ])
+          return -1;
         })
       }).catch((err) => {
         console.log(err)

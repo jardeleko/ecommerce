@@ -8,45 +8,42 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { isEmpty } from '@firebase/util'
 import app from '../firebase'
-import axios from 'axios'
+import { userRequest } from '../requestMethods'
+
 
 const User = () => {
     const currentUser = useSelector((state) => state.user.currentUser)
     const [user, setUser] = useState([])
-    const [order, setOrders] = useState([])
     const [inputs, setInputs] = useState({})
     const [file, setFile] = useState(null)
     const [values, setAddress] = useState([])
-    const BASE_URL = "http://localhost:3030/api"
-    const localRequest = axios.create({
-        baseURL: BASE_URL,
-        headers: {token: `Bearer ${currentUser.accessTk}`}
-    })
+    
     useEffect(() => {
         const getUser = async () => {
-            await localRequest.get(`/users/find/${currentUser._id}`).then((res) => {
+            await userRequest.get(`/users/find/${currentUser._id}`).then((res) => {
                 setUser(res.data)
             }).catch((err) => {
                 alert('Datas exists in db!')
                 console.log(err)
             })
         }
+        
         getUser()
     },[currentUser])
-    async function recursiveAction(order){
-        const city = (order.city.concat(', ').concat(order.country))
-        const comp = order.line1.split(',', 2)
-        const address = [{city:city, street:comp[0], code:order.postal_code, comp:comp[1]}]
-        await localRequest.put(`/users/${currentUser._id}`, {address:address}).then((res) => {  
-            console.log(res.data)  
-        }).catch((err) => {
-            console.log(err)
-        })   
-    }
+    
     useEffect(()  => {
+        const recursiveAction = async (order) => {
+            const city = (order.city.concat(', ').concat(order.country))
+            const comp = order.line1.split(',', 2)
+            const address = [{city:city, street:comp[0], code:order.postal_code, comp:comp[1]}]
+            await userRequest.put(`/users/${currentUser._id}`, {address:address}).then((res) => {  
+                console.log(res.data)  
+            }).catch((err) => {
+                console.log(err)
+            })   
+        }
         const getOrder = async () => {
-            await localRequest.get(`/orders/find/${currentUser._id}`).then((res) => {
-                setOrders(res.data)  
+            await userRequest.get(`/orders/find/${currentUser._id}`).then((res) => {
                 const order = res.data.filter((item) => item.address)
                 const topic = order[0].address
                 if(!isEmpty(topic)){
@@ -71,8 +68,8 @@ const User = () => {
             return {...prev, [e.target.name]:e.target.value}
         })
     }
-    async function submitRecursive(user) {    
-        await localRequest.put(`/users/${currentUser._id}`, user).then((res) => {  
+    const submitRecursive = async (user) => {    
+        await userRequest.put(`/users/${currentUser._id}`, user).then((res) => {  
             console.log(res.data)  
         }).catch((err) => {
             console.log(err)
@@ -123,6 +120,9 @@ const User = () => {
                 case 'storage/unknown':
                   // Unknown error occurred, inspect error.serverResponse
                   break;
+
+                default:
+                    break;
               }
             },
             async () => {
@@ -145,7 +145,6 @@ const User = () => {
         <Announcement />
             <div className="container-lg mt-3 " style={{marginTop:'0px'}}>
                 <div className='user'> 
-                    
                     <div className="userContainer">
                         <div className="userShow">
                             <div className="userShowTop">
@@ -185,7 +184,6 @@ const User = () => {
                         <div className="userUpdate">
                             <span className="userUpdateTitle">Update Credentials</span>
                             <form className="userUpdateForm">
-
                                 <div className="userUpdateLeft">
                                     <div className="userUpdateItem">
                                         <label>Full Name</label>
@@ -196,7 +194,6 @@ const User = () => {
                                             onChange={handleChange}
                                         ></input>
                                     </div>
-
                                     <div className="userUpdateItem">
                                         <label>Username</label>
                                         <input type='text'
@@ -206,7 +203,6 @@ const User = () => {
                                             onChange={handleChange}
                                         ></input>
                                     </div>
-                                    
                                     <div className="userUpdateItem">
                                         <label>Email</label>
                                         <input type='email'

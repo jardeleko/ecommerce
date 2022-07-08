@@ -18,11 +18,11 @@ import {
     addProductFailure 
 } from "./productRedux"
 
-import publicRequest from "../request/publicMethods"
+import { userRequest } from "../requestMethods"
 
 export const login = async (dispatch, user) => {
     dispatch(loginStart())
-    await publicRequest.post("/auth/login", user).then((res) => {        
+    await userRequest.post("/auth/login", user).then((res) => {        
         dispatch(loginSuccess(res.data))       
     }).catch(() => {
         dispatch(loginFailure())
@@ -31,7 +31,7 @@ export const login = async (dispatch, user) => {
 
 export const getProducts = async (dispatch) => {
     dispatch(getProductStart())
-    await publicRequest.get("/products").then((res) => {        
+    await userRequest.get("/products").then((res) => {        
         dispatch(getProductSuccess(res.data))       
     }).catch(() => {
         dispatch(getProductFailure())
@@ -40,7 +40,7 @@ export const getProducts = async (dispatch) => {
 
 export const deleteProduct = async (id, dispatch) => {
     dispatch(deleteProductStart())
-    await publicRequest.delete(`/products/${id}`).then((res) => {        
+    await userRequest.delete(`/products/${id}`).then((res) => {        
         dispatch(deleteProductSuccess(id))       
     }).catch(() => {
         dispatch(deleteProductFailure())
@@ -49,7 +49,7 @@ export const deleteProduct = async (id, dispatch) => {
 
 export const updateProduct = async (id, product, dispatch) => {
     dispatch(updateProductStart())
-    await publicRequest.put(`/products/${id}`, product).then((res) => {    
+    await userRequest.put(`/products/${id}`, product).then((res) => {    
         dispatch(updateProductSuccess({id, product}))       
     }).catch(() => {
         dispatch(updateProductFailure())
@@ -58,7 +58,7 @@ export const updateProduct = async (id, product, dispatch) => {
 
 export const addProduct = async (product, dispatch) => {
     dispatch(addProductStart())
-    await publicRequest.post('/products', product).then((res) => {        
+    await userRequest.post('/products', product).then((res) => {        
         dispatch(addProductSuccess(res.data))       
     }).catch(() => {
         dispatch(addProductFailure())

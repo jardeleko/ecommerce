@@ -78,11 +78,11 @@ const Login = () => {
     }
     const content = (
         <Container>
-        <Wrapper>
+        <Wrapper className='container'>
             <Title>SIGN IN </Title>
-            <Form>
-                <Input placeholder="username" type="text" onChange={(e) => setUsername(e.target.value)}/>
-                <Input placeholder="password" type="password" onChange={(e) => setPassword(e.target.value)}/>
+            <Form className='form-group'>
+                <Input className='form-control' placeholder="username" type="text" onChange={(e) => setUsername(e.target.value)}/>
+                <Input className='form-control' placeholder="password" type="password" onChange={(e) => setPassword(e.target.value)}/>
                 <Button onClick={handleLogin} >LOGIN</Button>
                 {error && <Error> Wrong credentials, try again! </Error>}
             </Form>

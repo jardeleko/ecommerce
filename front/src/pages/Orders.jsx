@@ -4,7 +4,7 @@ import Footer from '../components/Footer'
 import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import dateFormat from 'dateformat'
-import axios from 'axios'
+import { userRequest } from '../requestMethods'
 
 const Orders = () => {
     const [message, setMessage] = useState("")
@@ -12,17 +12,12 @@ const Orders = () => {
     const [feed, setFeedback] = useState('')
     const currentUser = useSelector((state) => state.user.currentUser)
     const [orders, setOrders] = useState("")
-    const BASE_URL = "http://localhost:3030/api"
-    const localRequest = axios.create({
-        baseURL: BASE_URL,
-        headers: {token: `Bearer ${currentUser.accessTk}`},
-    })
-    console.log(feed)
+    
     const handleSubmit = async () => {
         console.log(orderId)
         const result = {userId:currentUser._id, email:currentUser.email, orderId:orderId, message:message}
         console.log(result)
-        await localRequest.post('/reports', result).then((res) => {
+        await userRequest.post('/reports', result).then((res) => {
             console.log('create report' + res.data)
         }).catch((err) => {
             console.log(err)
@@ -31,7 +26,7 @@ const Orders = () => {
 
     useEffect(()  => {
         const getOrder = async () => {
-          await localRequest.get(`/orders/find/${currentUser._id}`).then((res) => {
+          await userRequest.get(`/orders/find/${currentUser._id}`).then((res) => {
             setOrders(res.data)  
             }).catch((err) => {
               console.log("error order"+err);

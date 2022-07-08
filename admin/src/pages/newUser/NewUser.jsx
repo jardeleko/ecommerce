@@ -1,4 +1,4 @@
-import publicRequest from '../../request/publicMethods'
+import { publicRequest } from '../../requestMethods'
 import Sidebar from "../../components/sidebar/Sidebar"
 import Topbar from "../../components/topbar/Topbar"
 import { isEmpty } from '@firebase/util'

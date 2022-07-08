@@ -1,4 +1,4 @@
-import publicRequest from '../../request/publicMethods'
+import { publicRequest } from '../../requestMethods'
 import Sidebar from '../../components/sidebar/Sidebar'
 import Topbar from '../../components/topbar/Topbar'
 import { useEffect } from 'react'
@@ -19,7 +19,6 @@ const Report = () => {
     }
     getReports()
   },[])
-  console.log(reports)
 
   const content = (<>
     <div className="container">
@@ -29,7 +28,7 @@ const Report = () => {
                 <div className="card card-just-text" data-background="color" data-color="blue" data-radius="none">
                     <div className="content">
                         <h4 className="category">{item.orderId}</h4>
-                        <h6 className="title"><a href="#">{item.email}</a></h6>
+                        <h6 className="title">{item.email}</h6>
                         <p className="description">{item.message}.</p>
                     </div>
                 </div> 

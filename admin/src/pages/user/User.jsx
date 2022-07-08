@@ -1,33 +1,27 @@
-import { CalendarToday, LocationCity, MailOutline, PermIdentity, PhoneAndroid, Publish } from '@material-ui/icons'
+import { LocationCity, MailOutline, PermIdentity, PhoneAndroid, Publish } from '@material-ui/icons'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
 import Sidebar from "../../components/sidebar/Sidebar"
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import Topbar from "../../components/topbar/Topbar"
+import { userRequest } from '../../requestMethods'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { isEmpty } from '@firebase/util'
 import app from '../../firebase'
-import axios from 'axios'
 import "../../app.css"
 import './user.css'
+
 
 const User = () => {
     const location = useLocation()
     const id = location.pathname.split("/")[2]
-    const currentUser = useSelector((state) => state.user.currentUser)
     const [user, setUser] = useState([])
     const [inputs, setInputs] = useState({})
     const [file, setFile] = useState(null)
     const [values, setAddress] = useState([])
-    const BASE_URL = "http://localhost:3030/api"
-    const localRequest = axios.create({
-        baseURL: BASE_URL,
-        headers: {token: `Bearer ${currentUser.accessTk}`}
-    })
     
     useEffect(() => {
         const getUser = async () => {
-            await localRequest.get(`/users/find/${id}`).then((res) => {
+            await userRequest.get(`/users/find/${id}`).then((res) => {
                 setUser(res.data)
             }).catch((err) => {
                 alert('Datas exists in db!')
@@ -50,7 +44,7 @@ const User = () => {
         })
     }
     async function submitRecursive(user) {    
-        await localRequest.put(`/users/${id}`, user).then((res) => {  
+        await userRequest.put(`/users/${id}`, user).then((res) => {  
             console.log(res.data)  
         }).catch((err) => {
             console.log(err)
@@ -85,6 +79,7 @@ const User = () => {
                   console.log('Upload is running');
                   break;
                 default:
+                    break;
               }
             },
             (error) => {
@@ -101,6 +96,8 @@ const User = () => {
                 case 'storage/unknown':
                   // Unknown error occurred, inspect error.serverResponse
                   break;
+                default:
+                    break;
               }
             },
             async () => {

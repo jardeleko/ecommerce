@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import {mobile} from '../responsive'
-import publicRequest from '../request/publicMethods'
+import { mobile } from '../responsive'
+import { publicRequest } from '../requestMethods'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 

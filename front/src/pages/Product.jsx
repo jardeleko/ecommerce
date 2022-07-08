@@ -7,11 +7,10 @@ import { Add, Remove } from '@material-ui/icons'
 import {mobile} from '../responsive'
 import { useLocation } from 'react-router'
 import {React, useEffect, useState} from 'react'
-import publicRequest from '../request/publicMethods'
+import {publicRequest, userRequest} from '../requestMethods'
 import { addProduct } from '../redux/cartRedux'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 
 const Container = styled.div``
 
@@ -152,12 +151,7 @@ const Product = () => {
     }
 
     const handleClick = async () => {
-        const BASE_URL = "http://localhost:3030/api"
-        const localRequest = axios.create({
-            baseURL: BASE_URL,
-            headers: {token: `Bearer ${currentUser.accessTk}`}
-        }) 
-        await localRequest.post("/cart", {
+        await userRequest.post("/cart", {
             userId: currentUser._id,
             products: {productId:id, quantity:quantity},    
         }).then((res) => {
